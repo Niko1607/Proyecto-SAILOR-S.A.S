@@ -1,3 +1,5 @@
+package src.main.java.com.sailor.inventario.model;
+import src.main.java.com.sailor.inventario.dao.ProveedorDAO;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -71,8 +73,8 @@ public class Proveedor {
         }
     } while (opcion.equalsIgnoreCase("s"));
 
-    proveedorDAO dao = new proveedorDAO();
-    dao.registrar_proveedor(proveedor);
+    ProveedorDAO dao = new ProveedorDAO();
+    dao.registrar_proveedor( proveedor);
     dao.listarProveedores();
     }
 }

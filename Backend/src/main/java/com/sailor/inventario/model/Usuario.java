@@ -1,8 +1,9 @@
-package Actividades_poo; // Asegúrate de que la ruta del paquete sea correcta
+package src.main.java.com.sailor.inventario.model;
+import src.main.java.com.sailor.inventario.dao.UsuarioDAO;
 import java.util.Scanner;
 import java.text.DecimalFormat;
 
-public class Empleado {
+public class Usuario {
     private String nombre;
     private int identificacion;
     private String cargo;
@@ -10,7 +11,7 @@ public class Empleado {
     private int horasTrabajadas;
     private static final double TARIFA_POR_HORA = 10.0; // Constante para tarifa
 
-    public Empleado(String nombre, int identificacion, String cargo, double salario, int horasTrabajadas) {
+    public Usuario(String nombre, int identificacion, String cargo, double salario, int horasTrabajadas) {
         this.nombre = nombre;
         this.identificacion = identificacion;
         this.cargo = cargo;
@@ -72,13 +73,13 @@ public class Empleado {
     }
 
     public static void main(String[] args) {
-        Empleado empleado = new Empleado("", 0, "", 0.0, 0);
+        Usuario empleado = new Usuario("", 0, "", 0.0, 0);
         empleado.registrarEmpleado();
         empleado.asignarHorario();
         empleado.calcularSalario();
 
-        EmpleadoDAO dao = new EmpleadoDAO();
-        dao.registrarEmpleado(empleado);
+        UsuarioDAO dao = new UsuarioDAO();
+        dao.registrarEmpleado(usuario);  
         dao.listarEmpleados(); // Para verificar el registro
     }
 }
