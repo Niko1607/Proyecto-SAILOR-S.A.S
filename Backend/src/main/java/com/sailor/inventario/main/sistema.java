@@ -76,7 +76,7 @@ public class sistema {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        Empleado empleado = new Empleado("", 0, "", 0, 0);
+        Usuario empleado = new Usuario("", 0, "", 0, 0);
         Producto producto = new Producto("", "", 0.0, 0);
         inventario inventario = new inventario("", 0);
         Proveedor proveedor = new Proveedor("", "");

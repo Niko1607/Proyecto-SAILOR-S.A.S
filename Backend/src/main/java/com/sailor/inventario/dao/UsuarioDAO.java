@@ -1,4 +1,5 @@
-package Actividades_poo;
+package src.main.java.com.sailor.inventario.dao;
+import src.main.java.com.sailor.inventario.model.Usuario;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,12 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-public class EmpleadoDAO {
+public class UsuarioDAO {
     private String url = "jdbc:mysql://localhost:3306/base_de_datos";
     private String usuario = "root";
     private String contraseña = "1617"; 
 
-    public void registrarEmpleado(Empleado empleado) {
+    public void registrarEmpleado(Usuario empleado) {
     String sql = "INSERT INTO empleados (nombre, identificacion, cargo, salario, Horas_trabajo) VALUES (?, ?, ?, ?, ?)";
     try {
         Class.forName("com.mysql.cj.jdbc.Driver");

@@ -1,3 +1,4 @@
+package src.main.java.com.sailor.inventario.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -5,11 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
-public class inventarioDAO {
-    private String url = "jdbc:mysql://localhost:3306/base_de_datos";
-    private String usuario = "root";
-    private String contraseña = "1617";
-
+public class InventarioDAO {
     public void agregarStock(String nombre, int cantidad) {
         String sql = "UPDATE productos SET cantidad = cantidad + ? WHERE nombre = ?";
         try (Connection conn = DriverManager.getConnection(url, usuario, contraseña);

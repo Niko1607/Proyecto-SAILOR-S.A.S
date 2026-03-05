@@ -1,11 +1,11 @@
-package Actividades_poo;
+package src.main.java.com.sailor.inventario.model;
 import java.util.Scanner;
 
-public class inventario {
+public class Inventario {
     private String nombre;
     private int cantidad;
 
-    public inventario(String nombre, int cantidad) {
+    public Inventario(String nombre, int cantidad) {
         this.nombre = nombre;
         this.cantidad = cantidad;
     }
@@ -47,7 +47,7 @@ public class inventario {
         System.out.print("Ingrese la cantidad inicial: ");
         int cantidadInicial = sc.nextInt();
 
-        inventario inv = new inventario(nombreProducto, cantidadInicial);
+        Inventario inv = new Inventario(nombreProducto, cantidadInicial);
         
         inv.agregarStock(10); 
         inv.retirarStock(5); 

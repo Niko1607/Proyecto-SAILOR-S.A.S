@@ -1,3 +1,5 @@
+package src.main.java.com.sailor.inventario.dao;
+import src.main.java.com.sailor.inventario.model.Producto;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -6,10 +8,6 @@ import java.sql.Statement;
 import java.sql.ResultSet;
 
 public class ProductoDAO {
-    private String url = "jdbc:mysql://localhost:3306/base_de_datos";
-    private String usuario = "root";
-    private String contraseña = "1617"; 
-
     public void registrarProducto(Producto producto) {
     String sql = "INSERT INTO productos (nombre, categoria, precio, cantidad) VALUES (?, ?, ?, ?)";
     try {
