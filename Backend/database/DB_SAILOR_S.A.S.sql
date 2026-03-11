@@ -7,6 +7,7 @@ CREATE TABLE Usuarios(
 	email VARCHAR(50) NOT NULL,
 	password VARCHAR(50) NOT NULL,
     rol VARCHAR(50) NOT NULL,
+    direccion VARCHAR(50) NOT NULL,
 	PRIMARY KEY(idUsuario)
 );
 
