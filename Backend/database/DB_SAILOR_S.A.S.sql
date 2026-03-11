@@ -25,9 +25,13 @@ CREATE TABLE Productos (
     nombre VARCHAR(50) NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
     descripcion TEXT NOT NULL,
+    cantidad INT NOT NULL,
+    stock_minimo BOOLEAN NOT NULL,
+    stock_maximo BOOLEAN NOT NULL,
+    fecha_de_registro DATE NOT NULL,
+    activo BOOLEAN NOT NULL,
     idCategoria INT NOT NULL,
     idProveedor INT NOT NULL,
-    stock INT NOT NULL,
     PRIMARY KEY (idProducto),
     FOREIGN KEY (idCategoria) REFERENCES Categorias(idCategoria) on delete cascade,
     FOREIGN KEY (idProveedor) REFERENCES Proveedores(idProveedor) on delete cascade
@@ -45,6 +49,10 @@ CREATE TABLE Proveedores(
     apellido VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
     telefono VARCHAR(50) NOT NULL,
+    direccion VARCHAR(50) NOT NULL,
+    tipoDeProveedor VARCHAR(50) NOT NULL,
+    activo BOOLEAN NOT NULL,
+    fechaDeRegistro DATE NOT NULL,
     PRIMARY KEY(idProveedor)
 );
 
