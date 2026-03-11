@@ -156,23 +156,23 @@ public class Usuario {
 
     public void actualizarUsuario() {
 
-        System.out.println("Escribe el nombre del empleado:");
+        System.out.println("Escribe el nombre del usuario:");
         setNombre(sc.nextLine());
 
-        System.out.println("Escribe el apellido del empleado:");
+        System.out.println("Escribe el apellido del usuario:");
         setApellido(sc.nextLine());
 
-        System.out.println("Escribe la identificación:");
+        System.out.println("Escribe la identificación del usuario:");
         setIdentificacion(sc.nextInt());
         sc.nextLine();
 
-        System.out.println("Escribe el correo:");
+        System.out.println("Escribe el correo del usuario:");
         setCorreo(sc.nextLine());
 
-        System.out.println("Escribe el rol:");
+        System.out.println("Escribe el rol del usuario:");
         setRol(sc.nextLine());
 
-        System.out.println("Escribe la dirección:");
+        System.out.println("Escribe la dirección del usuario:");
         setDireccion(sc.nextLine());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();

@@ -184,4 +184,26 @@ public class UsuarioDAO {
         }
     }
 
+    // =========================
+    // CAMBIAR DIRECCION
+    // =========================
+
+    public void cambiarDireccion(int id, String direccion) {
+
+        String sql = "UPDATE usuarios SET direccion=? WHERE id=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, direccion);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+
+            System.out.println("Dirección actualizada");
+
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar dirección: " + e.getMessage());
+        }
+    }
 }
