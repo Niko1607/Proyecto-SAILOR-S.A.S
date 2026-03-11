@@ -1,57 +1,186 @@
 package src.main.java.com.sailor.inventario.dao;
+
 import src.main.java.com.sailor.inventario.model.Usuario;
+import src.main.java.com.sailor.inventario.config.ConexionMySQL;
+
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UsuarioDAO {
-    private String url = "jdbc:mysql://localhost:3306/base_de_datos";
-    private String usuario = "root";
-    private String contraseña = "1617"; 
 
-    public void registrarEmpleado(Usuario empleado) {
-    String sql = "INSERT INTO empleados (nombre, identificacion, cargo, salario, Horas_trabajo) VALUES (?, ?, ?, ?, ?)";
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection conn = DriverManager.getConnection(url, usuario, contraseña);
-        PreparedStatement pstmt = conn.prepareStatement(sql);
+    // =========================
+    // INSERTAR USUARIO
+    // =========================
 
-        pstmt.setString(1, empleado.getNombre());
-        pstmt.setInt(2, empleado.getIdentificacion());
-        pstmt.setString(3, empleado.getCargo());
-        pstmt.setDouble(4, empleado.getSalario());
-        pstmt.setInt(5, empleado.getHorasTrabajadas());
+    public void insertarUsuario(Usuario usuarioObj) {
 
-        pstmt.executeUpdate();
-        System.out.println("Empleado registrado con éxito.");
+        String sql = "INSERT INTO usuarios (nombre, apellido, identificacion, correo, contraseña, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-        conn.close();
-        } catch (ClassNotFoundException e) {
-        System.out.println("Error: Driver no encontrado.");
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, usuarioObj.getNombre());
+            pstmt.setString(2, usuarioObj.getApellido());
+            pstmt.setInt(3, usuarioObj.getIdentificacion());
+            pstmt.setString(4, usuarioObj.getCorreo());
+            pstmt.setString(5, usuarioObj.getContraseña());
+            pstmt.setString(6, usuarioObj.getRol());
+            pstmt.setString(7, usuarioObj.getDireccion());
+
+            pstmt.executeUpdate();
+
+            System.out.println("Usuario registrado correctamente");
+
         } catch (SQLException e) {
-        System.out.println("Error al registrar empleado: " + e.getMessage());
-         }
+
+            System.out.println("Error al registrar usuario: " + e.getMessage());
+
+        }
     }
-    
-    public void listarEmpleados(){
-        String sql = "SELECT * FROM empleados";
-        try (Connection conn = DriverManager.getConnection(url, usuario, contraseña);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-            
-            while (rs.next()) {
-                System.out.println("ID:" +  rs.getInt("id")+
-                                   ", Nombre: " + rs.getString("nombre") +
-                                   ", Identificación: " + rs.getInt("identificacion") +
-                                   ", Cargo: " + rs.getString("cargo") +
-                                   ", Salario: " + rs.getDouble("salario") +
-                                   ", Horas Trabajadas: " + rs.getInt("Horas_trabajo"));
+
+    // =========================
+    // MOSTRAR USUARIO
+    // =========================
+
+    public Usuario mostrarUsuario(int id) {
+
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        Usuario usuario = null;
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+
+                usuario = new Usuario();
+
+                usuario.setId(rs.getInt("id"));
+                usuario.setNombre(rs.getString("nombre"));
+                usuario.setApellido(rs.getString("apellido"));
+                usuario.setIdentificacion(rs.getInt("identificacion"));
+                usuario.setCorreo(rs.getString("correo"));
+                usuario.setContraseña(rs.getString("contraseña"));
+                usuario.setRol(rs.getString("rol"));
+                usuario.setDireccion(rs.getString("direccion"));
+
             }
+
         } catch (SQLException e) {
-            System.out.println("Error al listar empleados: " + e.getMessage());
+
+            System.out.println("Error al buscar usuario: " + e.getMessage());
+
+        }
+
+        return usuario;
+    }
+
+    // =========================
+    // ACTUALIZAR USUARIO
+    // =========================
+
+    public void actualizarUsuario(Usuario usuarioObj) {
+
+        String sql = "UPDATE usuarios SET nombre=?, apellido=?, identificacion=?, correo=?, rol=?, direccion=? WHERE id=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, usuarioObj.getNombre());
+            pstmt.setString(2, usuarioObj.getApellido());
+            pstmt.setInt(3, usuarioObj.getIdentificacion());
+            pstmt.setString(4, usuarioObj.getCorreo());
+            pstmt.setString(5, usuarioObj.getRol());
+            pstmt.setString(6, usuarioObj.getDireccion());
+            pstmt.setInt(7, usuarioObj.getId());
+
+            pstmt.executeUpdate();
+
+            System.out.println("Usuario actualizado correctamente");
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al actualizar usuario: " + e.getMessage());
+
+        }
+    }
+
+    // =========================
+    // ELIMINAR USUARIO
+    // =========================
+
+    public void eliminarUsuario(int id) {
+
+        String sql = "DELETE FROM usuarios WHERE id=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            pstmt.executeUpdate();
+
+            System.out.println("Usuario eliminado correctamente");
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al eliminar usuario: " + e.getMessage());
+
+        }
+    }
+
+    // =========================
+    // CAMBIAR CONTRASEÑA
+    // =========================
+
+    public void cambiarContraseña(int id, String nuevaContraseña) {
+
+        String sql = "UPDATE usuarios SET contraseña=? WHERE id=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, nuevaContraseña);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+
+            System.out.println("Contraseña actualizada");
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al cambiar contraseña: " + e.getMessage());
+
+        }
+    }
+
+    // =========================
+    // CAMBIAR ROL
+    // =========================
+
+    public void cambiarRol(int id, String rol) {
+
+        String sql = "UPDATE usuarios SET rol=? WHERE id=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, rol);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+
+            System.out.println("Rol actualizado");
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al cambiar rol: " + e.getMessage());
+
         }
     }
 
