@@ -220,4 +220,38 @@ public class ProductoDAO {
             System.out.println("Error al cambiar fecha de registro: " + e.getMessage());
         }
     }
+
+    // =========================
+    // CAMBIAR ACTIVO
+    // =========================
+
+    public void cambiarActivo(int id, boolean activo) {
+        String sql = "UPDATE productos SET activo=? WHERE id=?";
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setBoolean(1, activo);
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+            System.out.println("Activo actualizado");
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar activo: " + e.getMessage());
+        }
+    } 
+    
+    // =========================
+    // CAMBIAR CANTIDAD
+    // =========================
+
+    public void cambiarCantidad(int id, int cantidad) {
+        String sql = "UPDATE productos SET cantidad=? WHERE id=?";
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, cantidad);
+            pstmt.setInt(2, id);
+            pstmt.executeUpdate();
+            System.out.println("Cantidad actualizada");
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar cantidad: " + e.getMessage());
+        }
+    }
 }
