@@ -1,6 +1,6 @@
-package src.main.java.com.sailor.inventario.model;
+package com.sailor.inventario.model;
 
-import src.main.java.com.sailor.inventario.dao.UsuarioDAO;
+import com.sailor.inventario.dao.UsuarioDAO;
 import java.util.Scanner;
 
 public class Usuario {
@@ -10,7 +10,7 @@ public class Usuario {
     private String Apellido;
     private int Identificacion;
     private String Correo;
-    private String Contraseña;
+    private String Contrasena;
     private String Rol;
     private String Direccion;
 
@@ -24,7 +24,7 @@ public class Usuario {
         this.Apellido = Apellido;
         this.Identificacion = Identificacion;
         this.Correo = Correo;
-        this.Contraseña = Contraseña;
+        this.Contrasena = Contrasena;
         this.Rol = Rol;
         this.Direccion = Direccion;
     }
@@ -69,12 +69,12 @@ public class Usuario {
         this.Correo = Correo;
     }
 
-    public String getContraseña() {
-        return Contraseña;
+    public String getContrasena() {
+        return Contrasena;
     }
 
-    public void setContraseña(String Contraseña) {
-        this.Contraseña = Contraseña;
+    public void setContrasena(String Contrasena) {
+        this.Contrasena = Contrasena;
     }
 
     public String getRol() {
@@ -99,26 +99,26 @@ public class Usuario {
 
     public void registrarUsuario() {
 
-        System.out.println("Escribe el nombre del empleado:");
+        System.out.println("Escribe el Nombre: ");
         setNombre(sc.nextLine());
 
-        System.out.println("Escribe el apellido del empleado:");
+        System.out.println("Escribe el Apellido :");
         setApellido(sc.nextLine());
 
-        System.out.println("Escribe la identificación:");
+        System.out.println("Escribe la Identificación:");
         setIdentificacion(sc.nextInt());
         sc.nextLine();
 
-        System.out.println("Escribe el correo del empleado:");
+        System.out.println("Escribe el Correo:");
         setCorreo(sc.nextLine());
 
-        System.out.println("Escribe la contraseña del empleado:");
-        setContraseña(sc.nextLine());
+        System.out.println("Escribe la Contraseña:");
+        setContrasena(sc.nextLine());
 
-        System.out.println("Escribe el rol del empleado:");
+        System.out.println("Escribe el rol:");
         setRol(sc.nextLine());
 
-        System.out.println("Escribe la dirección del empleado:");
+        System.out.println("Escribe la Dirección del empleado:");
         setDireccion(sc.nextLine());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -194,13 +194,13 @@ public class Usuario {
     // CAMBIAR CONTRASEÑA
     // ===============================
 
-    public void cambiarContraseña() {
+    public void cambiarContrasena() {
 
         System.out.println("Escribe la nueva contraseña:");
-        setContraseña(sc.nextLine());
+        setContrasena(sc.nextLine());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarContraseña(this.getIdUsuario(), this.getContraseña());
+        usuarioDAO.cambiarContrasena(this.getIdUsuario(), this.getContrasena());
 
     }
 

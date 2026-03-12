@@ -1,2 +1,10 @@
 #.env
 .env
+
+# Ignorar la carpeta target
+/target/
+
+# Ignorar archivos de configuración locales
+*.log
+*.iml
+.idea/

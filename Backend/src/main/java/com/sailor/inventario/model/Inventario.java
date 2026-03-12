@@ -1,6 +1,6 @@
-package src.main.java.com.sailor.inventario.model;
+package com.sailor.inventario.model;
 
-import src.main.java.com.sailor.inventario.dao.ProductoDAO;
+import com.sailor.inventario.dao.ProductoDAO;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.util.Date;

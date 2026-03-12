@@ -1,6 +1,6 @@
-package src.main.java.com.sailor.inventario.dao;
-import src.main.java.com.sailor.inventario.model.Producto;
-import src.main.java.com.sailor.inventario.config.ConexionMySQL;
+package com.sailor.inventario.dao;
+import com.sailor.inventario.model.Producto;
+import com.sailor.inventario.config.ConexionMySQL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

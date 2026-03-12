@@ -1,4 +1,4 @@
-package src.main.java.com.sailor.inventario.model;
+package com.sailor.inventario.model;
 
 public class Detalle_venta {
     

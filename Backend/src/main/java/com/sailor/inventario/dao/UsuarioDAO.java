@@ -1,7 +1,7 @@
-package src.main.java.com.sailor.inventario.dao;
+package com.sailor.inventario.dao;
 
-import src.main.java.com.sailor.inventario.model.Usuario;
-import src.main.java.com.sailor.inventario.config.ConexionMySQL;
+import com.sailor.inventario.model.Usuario;
+import com.sailor.inventario.config.ConexionMySQL;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,7 +16,7 @@ public class UsuarioDAO {
 
     public void insertarUsuario(Usuario usuarioObj) {
 
-        String sql = "INSERT INTO usuarios (nombre, apellido, identificacion, correo, contraseña, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios (nombre, apellido, identificacion, correo, contrasena, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -25,7 +25,7 @@ public class UsuarioDAO {
             pstmt.setString(2, usuarioObj.getApellido());
             pstmt.setInt(3, usuarioObj.getIdentificacion());
             pstmt.setString(4, usuarioObj.getCorreo());
-            pstmt.setString(5, usuarioObj.getContraseña());
+            pstmt.setString(5, usuarioObj.getContrasena());
             pstmt.setString(6, usuarioObj.getRol());
             pstmt.setString(7, usuarioObj.getDireccion());
 
@@ -44,15 +44,15 @@ public class UsuarioDAO {
     // MOSTRAR USUARIO
     // =========================
 
-    public Usuario mostrarUsuario(int id) {
+    public Usuario mostrarUsuario(int idUsuario) {
 
-        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        String sql = "SELECT * FROM usuarios WHERE idUsuario = ?";
         Usuario usuario = null;
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, idUsuario);
 
             ResultSet rs = pstmt.executeQuery();
 
@@ -60,12 +60,12 @@ public class UsuarioDAO {
 
                 usuario = new Usuario();
 
-                usuario.setId(rs.getInt("id"));
+                usuario.setId(rs.getInt("idUsuario"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellido(rs.getString("apellido"));
                 usuario.setIdentificacion(rs.getInt("identificacion"));
                 usuario.setCorreo(rs.getString("correo"));
-                usuario.setContraseña(rs.getString("contraseña"));
+                usuario.setContrasena(rs.getString("contrasena"));
                 usuario.setRol(rs.getString("rol"));
                 usuario.setDireccion(rs.getString("direccion"));
 
@@ -114,14 +114,14 @@ public class UsuarioDAO {
     // ELIMINAR USUARIO
     // =========================
 
-    public void eliminarUsuario(int id) {
+    public void eliminarUsuario(int IdUsuario) {
 
-        String sql = "DELETE FROM usuarios WHERE id=?";
+        String sql = "DELETE FROM usuarios WHERE idUsuario=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, id);
+            pstmt.setInt(1, IdUsuario);
 
             pstmt.executeUpdate();
 
@@ -138,15 +138,15 @@ public class UsuarioDAO {
     // CAMBIAR CONTRASEÑA
     // =========================
 
-    public void cambiarContraseña(int id, String nuevaContraseña) {
+    public void cambiarContrasena(int IdUsuario, String nuevaContraseña) {
 
-        String sql = "UPDATE usuarios SET contraseña=? WHERE id=?";
+        String sql = "UPDATE usuarios SET contraseña=? WHERE idUsuario=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, nuevaContraseña);
-            pstmt.setInt(2, id);
+            pstmt.setInt(2, IdUsuario);
 
             pstmt.executeUpdate();
 
@@ -163,15 +163,15 @@ public class UsuarioDAO {
     // CAMBIAR ROL
     // =========================
 
-    public void cambiarRol(int id, String rol) {
+    public void cambiarRol(int IdUsuario, String rol) {
 
-        String sql = "UPDATE usuarios SET rol=? WHERE id=?";
+        String sql = "UPDATE usuarios SET rol=? WHERE idUsuario=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, rol);
-            pstmt.setInt(2, id);
+            pstmt.setInt(2, IdUsuario);
 
             pstmt.executeUpdate();
 
@@ -188,7 +188,7 @@ public class UsuarioDAO {
     // CAMBIAR DIRECCION
     // =========================
 
-    public void cambiarDireccion(int id, String direccion) {
+    public void cambiarDireccion(int IdUsuario, String direccion) {
 
         String sql = "UPDATE usuarios SET direccion=? WHERE id=?";
 
@@ -196,7 +196,7 @@ public class UsuarioDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, direccion);
-            pstmt.setInt(2, id);
+            pstmt.setInt(2, IdUsuario);
 
             pstmt.executeUpdate();
 
