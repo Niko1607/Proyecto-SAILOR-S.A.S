@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class Usuario {
 
-    private int Id = 0;
+    private int IdUsuario = 0;
     private String Nombre;
     private String Apellido;
     private int Identificacion;
@@ -18,8 +18,8 @@ public class Usuario {
 
     public Usuario(){}
 
-    public Usuario(int Id ,String Nombre, String Apellido ,int Identificacion, String Correo, String Contraseña, String Rol, String Direccion){
-        this.Id = Id;
+    public Usuario(int IdUsuario ,String Nombre, String Apellido ,int Identificacion, String Correo, String Contraseña, String Rol, String Direccion){
+        this.IdUsuario = IdUsuario;
         this.Nombre = Nombre;
         this.Apellido = Apellido;
         this.Identificacion = Identificacion;
@@ -29,12 +29,12 @@ public class Usuario {
         this.Direccion = Direccion;
     }
 
-    public int getId() {
-        return Id;
+    public int getIdUsuario() {
+        return IdUsuario;
     }
 
-    public void setId(int Id) {
-        this.Id = Id;
+    public void setId(int IdUsuario) {
+        this.IdUsuario = IdUsuario;
     }
 
     public String getNombre() {
@@ -186,7 +186,7 @@ public class Usuario {
     public void eliminarUsuario() {
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.eliminarUsuario(this.getId());
+        usuarioDAO.eliminarUsuario(this.getIdUsuario());
 
     }
 
@@ -200,7 +200,7 @@ public class Usuario {
         setContraseña(sc.nextLine());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarContraseña(this.getId(), this.getContraseña());
+        usuarioDAO.cambiarContraseña(this.getIdUsuario(), this.getContraseña());
 
     }
 
@@ -214,7 +214,7 @@ public class Usuario {
         setRol(sc.nextLine());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarRol(this.getId(), this.getRol());
+        usuarioDAO.cambiarRol(this.getIdUsuario(), this.getRol());
 
     }
 
@@ -228,7 +228,7 @@ public class Usuario {
         setDireccion(sc.nextLine());
 
         UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarDireccion(this.getId(), this.getDireccion());
+        usuarioDAO.cambiarDireccion(this.getIdUsuario(), this.getDireccion());
 
     }
 
