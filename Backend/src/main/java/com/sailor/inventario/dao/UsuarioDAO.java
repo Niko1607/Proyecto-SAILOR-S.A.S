@@ -97,7 +97,7 @@ public class UsuarioDAO {
             pstmt.setString(4, usuarioObj.getCorreo());
             pstmt.setString(5, usuarioObj.getRol());
             pstmt.setString(6, usuarioObj.getDireccion());
-            pstmt.setInt(7, usuarioObj.getId());
+            pstmt.setInt(7, usuarioObj.getIdUsuario());
 
             pstmt.executeUpdate();
 
