@@ -4,8 +4,9 @@ CREATE TABLE Usuarios(
 	idUsuario INT NOT NULL AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
 	apellido VARCHAR(50) NOT NULL,
-	email VARCHAR(50) NOT NULL,
-	password VARCHAR(50) NOT NULL,
+	correo VARCHAR(50) NOT NULL,
+    identificacion INT NOT NULL,
+	constrasena VARCHAR(50) NOT NULL,
     rol VARCHAR(50) NOT NULL,
     direccion VARCHAR(50) NOT NULL,
 	PRIMARY KEY(idUsuario)
@@ -66,4 +67,4 @@ CREATE TABLE DetalleVenta(
     FOREIGN KEY(idVenta) REFERENCES Venta(idVenta),
     FOREIGN KEY(idProducto) REFERENCES Productos(idProducto)
 );
-
+ALTER TABLE usuarios CHANGE contrasena contrasena VARCHAR(50) NOT NULL;
