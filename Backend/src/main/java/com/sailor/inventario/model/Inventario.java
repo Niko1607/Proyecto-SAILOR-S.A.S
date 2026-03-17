@@ -4,57 +4,38 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Inventario {
-    private int IdUsuario;
-    private Usuario usuario;
+
+    private int idInventario;
     private Producto producto;
-    private int IdInventario;
-    private String Fecha;
-    private double Precio;
+    private Usuario usuario;
+    private int cantidad;
+    private String fechaMovimiento;
 
     public Inventario() {
-        this.producto = new Producto();
-        this.IdInventario = 0;
-        this.Fecha = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-        this.Precio = 0.0;
-        this.IdUsuario = 0;
+        this.fechaMovimiento = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
-    public Inventario(Producto producto) {
+    public Inventario(Producto producto, Usuario usuario, int cantidad) {
         this.producto = producto;
-        
-        if (this.producto.getFecha_de_registro() == null || this.producto.getFecha_de_registro().isEmpty()) {
-            this.producto.setFecha_de_registro(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-        }
-    }
-    public void setIdUsuario(int IdUsuario) {
-        this.IdUsuario = IdUsuario;
-    }   
-    public int getIdUsuario() {
-        return IdUsuario;
+        this.usuario = usuario;
+        this.cantidad = cantidad;
+        this.fechaMovimiento = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
     public int getIdInventario() {
-        return IdInventario;
+        return idInventario;
     }
 
-    public void setIdInventario(int IdInventario) {
-        this.IdInventario = IdInventario;
+    public void setIdInventario(int idInventario) {
+        this.idInventario = idInventario;
     }
 
-    public String getFecha() {
-        return Fecha;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setFecha(String Fecha) {
-        this.Fecha = Fecha;
-    }
-
-    public double getPrecio() {
-        return Precio;
-    }
-
-    public void setPrecio(double Precio) {
-        this.Precio = Precio;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
     public Usuario getUsuario() {
@@ -63,5 +44,21 @@ public class Inventario {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public String getFechaMovimiento() {
+        return fechaMovimiento;
+    }
+
+    public void setFechaMovimiento(String fechaMovimiento) {
+        this.fechaMovimiento = fechaMovimiento;
     }
 }

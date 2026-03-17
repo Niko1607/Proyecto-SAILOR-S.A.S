@@ -4,88 +4,101 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Proveedor {
-    private int IdProveedor = 0;
-    private String NombreProveedorEmpresa;
-    private String Identificación;
-    private String Telefono;
-    private String Direccion;
-    private String Correo;
+
+    private int idProveedor;
+    private String nombreProveedorEmpresa;
+    private String identificacion;
+    private String telefono;
+    private String direccion;
+    private String correo;
     private String tipoProveedor;
     private boolean activo;
     private String fechaRegistro;
     private String ciudad;
 
-
-    public Proveedor(int IdProveedor, String NombreProveedorEmpresa, String Identificación, String Telefono, String Direccion, String Correo, String tipoProveedor, boolean activo, String fechaRegistro) {
-        this.IdProveedor = IdProveedor;
-        this.NombreProveedorEmpresa = NombreProveedorEmpresa;
-        this.Identificación = Identificación;
-        this.Telefono = Telefono;
-        this.Direccion = Direccion;
-        this.Correo = Correo;
-        this.tipoProveedor = "Proveedor";
-        this.activo = true;
+    public Proveedor(){
         this.fechaRegistro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-        this.ciudad = "Ciudad";
+        this.activo = true;
     }
-    
-    public Proveedor() {
+
+    public Proveedor(int idProveedor, String nombreProveedorEmpresa, String identificacion,
+                     String telefono, String direccion, String correo,
+                     String tipoProveedor, boolean activo, String ciudad){
+
+        this.idProveedor = idProveedor;
+        this.nombreProveedorEmpresa = nombreProveedorEmpresa;
+        this.identificacion = identificacion;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.correo = correo;
+        this.tipoProveedor = tipoProveedor;
+        this.activo = activo;
+        this.ciudad = ciudad;
+        this.fechaRegistro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
     public int getIdProveedor() {
-        return IdProveedor;
+        return idProveedor; 
     }
 
-    public void setIdProveedor(int IdProveedor) {
-        this.IdProveedor = IdProveedor;
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
     public String getNombreProveedorEmpresa() {
-        return NombreProveedorEmpresa;
+        return nombreProveedorEmpresa;
     }
 
-    public void setNombreProveedorEmpresa(String NombreProveedorEmpresa) {
-        this.NombreProveedorEmpresa = NombreProveedorEmpresa;
+    public void setNombreProveedorEmpresa(String nombreProveedorEmpresa) {
+        this.nombreProveedorEmpresa = nombreProveedorEmpresa;
     }
 
-    public String getIdentificación() {
-        return Identificación;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setIdentificación(String Identificación) {
-        this.Identificación = Identificación;
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
     }
 
     public String getTelefono() {
-        return Telefono;
+        return telefono;
     }
 
-    public void setTelefono(String Telefono) {
-        this.Telefono = Telefono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getDireccion() {
-        return Direccion;
+        return direccion;
     }
-
-    public void setDireccion(String Direccion) {
-        this.Direccion = Direccion;
+    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getCorreo() {
-        return Correo;
+        return correo;
     }
 
-    public void setCorreo(String Correo) {
-        this.Correo = Correo;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
     public String getTipoProveedor() {
         return tipoProveedor;
     }
-
+    
     public void setTipoProveedor(String tipoProveedor) {
         this.tipoProveedor = tipoProveedor;
+    }
+
+    public String getCiudad() {        
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
     public boolean isActivo() {
@@ -93,7 +106,7 @@ public class Proveedor {
     }
 
     public void setActivo(boolean activo) {
-        this.activo = activo;
+        this.activo = activo;   
     }
 
     public String getFechaRegistro() {
@@ -102,13 +115,5 @@ public class Proveedor {
 
     public void setFechaRegistro(String fechaRegistro) {
         this.fechaRegistro = fechaRegistro;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
     }
 }

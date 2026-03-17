@@ -2,90 +2,91 @@ package com.sailor.inventario.model;
 
 public class Usuario {
 
-    private int IdUsuario = 0;
-    private String Nombre;
-    private String Apellido;
-    private int Identificacion;
-    private String Correo;
-    private String Contraseña ;
-    private String Rol;
-    private String Direccion;
-
+    private int idUsuario;
+    private String nombre;
+    private String apellido;
+    private String identificacion;
+    private String correo;
+    private String password;
+    private String rol;
+    private String direccion;
 
     public Usuario(){}
 
-    public Usuario(int IdUsuario ,String Nombre, String Apellido ,int Identificacion, String Correo, String Contraseña, String Rol, String Direccion){
-        this.IdUsuario = IdUsuario;
-        this.Nombre = Nombre;
-        this.Apellido = Apellido;
-        this.Identificacion = Identificacion;
-        this.Correo = Correo;
-        this.Contraseña = Contraseña;
-        this.Rol = Rol;
-        this.Direccion = Direccion;
+    public Usuario(int idUsuario, String nombre, String apellido, String identificacion,
+                   String correo, String password, String rol, String direccion){
+
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.identificacion = identificacion;
+        this.correo = correo;
+        this.password = password;
+        this.rol = rol;
+        this.direccion = direccion;
     }
 
     public int getIdUsuario() {
-        return IdUsuario;
+        return idUsuario;
     }
 
-    public void setIdUsuario(int IdUsuario) {
-        this.IdUsuario = IdUsuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellido() {
-        return Apellido;
+        return apellido;
     }
 
-    public void setApellido(String Apellido) {
-        this.Apellido = Apellido;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
-    public int getIdentificacion() {
-        return Identificacion;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setIdentificacion(int Identificacion) {
-        this.Identificacion = Identificacion;
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
     }
 
     public String getCorreo() {
-        return Correo;
+        return correo;
     }
 
-    public void setCorreo(String Correo) {
-        this.Correo = Correo;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public String getContraseña() {
-        return Contraseña;
+    public String getPassword() {
+        return password;
     }
 
-    public void setContraseña(String Contraseña) {
-        this.Contraseña = Contraseña;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRol() {
-        return Rol;
+        return rol;
     }
 
-    public void setRol(String Rol) {
-        this.Rol = Rol;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     public String getDireccion() {
-        return Direccion;
+        return direccion;
     }
 
-    public void setDireccion(String Direccion) {
-        this.Direccion = Direccion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 }

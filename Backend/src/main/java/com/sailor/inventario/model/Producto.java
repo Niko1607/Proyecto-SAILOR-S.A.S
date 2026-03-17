@@ -4,100 +4,110 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Producto {
-    private int IdProducto;
-    private String Nombre_Producto;
-    private String Descripcion;
-    private double Precio_Producto;
-    private int Cantidad; 
-    private boolean Strok_minimo;
-    private boolean Strok_maximo;
-    private String Fecha_de_registro;
-    private boolean Activo;
 
-    public Producto(int IdProducto, String Nombre_Producto, String Descripcion, double Precio_Producto, int Cantidad, boolean Strok_minimo, boolean Strok_maximo, String Fecha_de_registro, boolean Activo) {
-        this.IdProducto = IdProducto;
-        this.Nombre_Producto = Nombre_Producto;
-        this.Descripcion = Descripcion;
-        this.Precio_Producto = Precio_Producto;
-        this.Cantidad = Cantidad;
-        this.Strok_minimo = Strok_minimo;
-        this.Strok_maximo = Strok_maximo;
-        this.Fecha_de_registro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
-        this.Activo = Activo;   
+    private int idProducto;
+    private String nombreProducto;
+    private String descripcion;
+    private double precioProducto;
+    private int cantidad;
+    private int stockMinimo;
+    private int stockMaximo;
+    private String fechaRegistro;
+    private boolean activo;
+
+    public Producto(){
+        this.fechaRegistro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        this.activo = true;
     }
 
-    public Producto() {
+    public Producto(int idProducto, String nombreProducto, String descripcion,
+                    double precioProducto, int cantidad,
+                    int stockMinimo, int stockMaximo, boolean activo){
+
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
+        this.descripcion = descripcion;
+        this.precioProducto = precioProducto;
+        this.cantidad = cantidad;
+        this.stockMinimo = stockMinimo;
+        this.stockMaximo = stockMaximo;
+        this.activo = activo;
+        this.fechaRegistro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
     public int getIdProducto() {
-        return IdProducto;
+        return idProducto;  
+    
     }
 
-    public void setIdProducto(int IdProducto) {
-        this.IdProducto = IdProducto;
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
-    public String getNombre_Producto() {        
-        return Nombre_Producto;
+    public String getNombreProducto() {
+        return nombreProducto;
     }
 
-    public void setNombre_Producto(String Nombre_Producto) {
-        this.Nombre_Producto = Nombre_Producto;
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;   
     }
 
     public String getDescripcion() {
-        return Descripcion;
+        return descripcion;
     }
 
-    public void setDescripcion(String Descripcion) {
-        this.Descripcion = Descripcion;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public double getPrecio_Producto() {
-        return Precio_Producto;
+    public double getPrecioProducto() {
+        return precioProducto;
     }
 
-    public void setPrecio_Producto(double Precio_Producto) {
-        this.Precio_Producto = Precio_Producto;
+    public void setPrecioProducto(double precioProducto) {
+        this.precioProducto = precioProducto;
     }
 
     public int getCantidad() {
-        return Cantidad;
+        return cantidad;
     }
 
-    public void setCantidad(int Cantidad) {
-        this.Cantidad = Cantidad;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;   
     }
 
-    public boolean isStrok_minimo() {
-        return Strok_minimo;
+    public int getStockMinimo() {
+        return stockMinimo;
     }
 
-    public void setStrok_minimo(boolean Strok_minimo) {
-        this.Strok_minimo = Strok_minimo;
+    public void setStockMinimo(int stockMinimo) {
+        this.stockMinimo = stockMinimo;
+        this.activo = true;
     }
 
-    public boolean isStrok_maximo() {
-        return Strok_maximo;
+    public int getStockMaximo() {
+        return stockMaximo;
     }
 
-    public void setStrok_maximo(boolean Strok_maximo) {
-        this.Strok_maximo = Strok_maximo;
+    public void setStockMaximo(int stockMaximo) {
+        this.stockMaximo = stockMaximo;
+        this.activo = true; 
     }
 
-    public String getFecha_de_registro() {
-        return Fecha_de_registro;
+    public String getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setFecha_de_registro(String Fecha_de_registro) {
-        this.Fecha_de_registro = Fecha_de_registro;
+    public void setFechaRegistro(String fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
+        this.activo = true;
     }
 
     public boolean isActivo() {
-        return Activo;
+        return activo;
     }
 
-    public void setActivo(boolean Activo) {
-        this.Activo = Activo;
-    }   
+    public void setActivo(boolean activo) {
+            this.activo = activo;
+    }
 }

@@ -1,58 +1,62 @@
 package com.sailor.inventario.model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Venta {
-    private int IdVenta = 0;
-    private double fecha;
-    private double Nombre;
-    private int Total;
+
+    private int idVenta;
+    private String fecha;
+    private int idUsuario;
+    private double total;
     private boolean estado;
 
-    public Venta(int IdVenta, int fecha, double Nombre, int Total, boolean estado) {
-        this.IdVenta = IdVenta;
-        this.fecha = fecha;
-        this.Nombre = Nombre;
-        this.Total = Total;
-        this.estado = estado;
+    public Venta() {
+        this.fecha = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
+        this.estado = true;
     }
 
-    public void setIdVenta(int IdVenta) {
-        this.IdVenta = IdVenta;
+    public Venta(int idVenta, int idUsuario, double total) {
+        this.idVenta = idVenta;
+        this.idUsuario = idUsuario;
+        this.total = total;
+        this.estado = true;
+        this.fecha = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
     public int getIdVenta() {
-        return IdVenta;
+        return idVenta;
     }
 
-    public void setFecha(double fecha) {
-        this.fecha = fecha;
+    public void setIdVenta(int idVenta) {
+        this.idVenta = idVenta;
     }
 
-    public double getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setNombre(double Nombre) {
-        this.Nombre = Nombre;
+    public int getIdUsuario() {
+        return idUsuario;
     }
 
-    public double getNombre() {
-        return Nombre;
-    }   
-
-    public void setTotal(int Total) {
-        this.Total = Total;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
-    public int getTotal() {
-        return Total;
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public boolean isEstado() {
+        return estado;
     }
 
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
-
-    public boolean isEstado() {
-        return estado;
-    }   
 }
- 
