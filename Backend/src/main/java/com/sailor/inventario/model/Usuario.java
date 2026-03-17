@@ -1,235 +1,92 @@
 package com.sailor.inventario.model;
 
-import com.sailor.inventario.dao.UsuarioDAO;
-import java.util.Scanner;
-
 public class Usuario {
 
-    private int IdUsuario = 0;
-    private String Nombre;
-    private String Apellido;
-    private int Identificacion;
-    private String Correo;
-    private String Contrasena;
-    private String Rol;
-    private String Direccion;
-
-    private static Scanner sc = new Scanner(System.in);
+    private int idUsuario;
+    private String nombre;
+    private String apellido;
+    private String identificacion;
+    private String correo;
+    private String password;
+    private String rol;
+    private String direccion;
 
     public Usuario(){}
 
-    public Usuario(int IdUsuario ,String Nombre, String Apellido ,int Identificacion, String Correo, String Contraseña, String Rol, String Direccion){
-        this.IdUsuario = IdUsuario;
-        this.Nombre = Nombre;
-        this.Apellido = Apellido;
-        this.Identificacion = Identificacion;
-        this.Correo = Correo;
-        this.Contrasena = Contrasena;
-        this.Rol = Rol;
-        this.Direccion = Direccion;
+    public Usuario(int idUsuario, String nombre, String apellido, String identificacion,
+                   String correo, String password, String rol, String direccion){
+
+        this.idUsuario = idUsuario;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.identificacion = identificacion;
+        this.correo = correo;
+        this.password = password;
+        this.rol = rol;
+        this.direccion = direccion;
     }
 
     public int getIdUsuario() {
-        return IdUsuario;
+        return idUsuario;
     }
 
-    public void setId(int IdUsuario) {
-        this.IdUsuario = IdUsuario;
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
-    public void setNombre(String Nombre) {
-        this.Nombre = Nombre;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public String getApellido() {
-        return Apellido;
+        return apellido;
     }
 
-    public void setApellido(String Apellido) {
-        this.Apellido = Apellido;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
-    public int getIdentificacion() {
-        return Identificacion;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setIdentificacion(int Identificacion) {
-        this.Identificacion = Identificacion;
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
     }
 
     public String getCorreo() {
-        return Correo;
+        return correo;
     }
 
-    public void setCorreo(String Correo) {
-        this.Correo = Correo;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public String getContrasena() {
-        return Contrasena;
+    public String getPassword() {
+        return password;
     }
 
-    public void setContrasena(String Contrasena) {
-        this.Contrasena = Contrasena;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getRol() {
-        return Rol;
+        return rol;
     }
 
-    public void setRol(String Rol) {
-        this.Rol = Rol;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 
     public String getDireccion() {
-        return Direccion;
+        return direccion;
     }
 
-    public void setDireccion(String Direccion) {
-        this.Direccion = Direccion;
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
-
-    // ===============================
-    // REGISTRAR USUARIO
-    // ===============================
-
-    public void registrarUsuario() {
-
-        System.out.println("Escribe el Nombre: ");
-        setNombre(sc.nextLine());
-
-        System.out.println("Escribe el Apellido :");
-        setApellido(sc.nextLine());
-
-        System.out.println("Escribe la Identificación:");
-        setIdentificacion(sc.nextInt());
-        sc.nextLine();
-
-        System.out.println("Escribe el Correo:");
-        setCorreo(sc.nextLine());
-
-        System.out.println("Escribe la Contraseña:");
-        setContrasena(sc.nextLine());
-
-        System.out.println("Escribe el rol:");
-        setRol(sc.nextLine());
-
-        System.out.println("Escribe la Dirección del empleado:");
-        setDireccion(sc.nextLine());
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.insertarUsuario(this);
-    }
-
-    // ===============================
-    // MOSTRAR USUARIO
-    // ===============================
-
-    public void mostrarUsuario(int id) {
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        Usuario usuario = usuarioDAO.mostrarUsuario(id);
-
-        if(usuario != null){
-
-            System.out.println("Nombre: " + usuario.getNombre());
-            System.out.println("Apellido: " + usuario.getApellido());
-            System.out.println("Identificación: " + usuario.getIdentificacion());
-            System.out.println("Correo: " + usuario.getCorreo());
-            System.out.println("Rol: " + usuario.getRol());
-            System.out.println("Dirección: " + usuario.getDireccion());
-
-        } else {
-
-            System.out.println("Usuario no encontrado");
-
-        }
-    }
-
-    // ===============================
-    // ACTUALIZAR USUARIO
-    // ===============================
-
-    public void actualizarUsuario() {
-
-        System.out.println("Escribe el nombre del usuario:");
-        setNombre(sc.nextLine());
-
-        System.out.println("Escribe el apellido del usuario:");
-        setApellido(sc.nextLine());
-
-        System.out.println("Escribe la identificación del usuario:");
-        setIdentificacion(sc.nextInt());
-        sc.nextLine();
-
-        System.out.println("Escribe el correo del usuario:");
-        setCorreo(sc.nextLine());
-
-        System.out.println("Escribe el rol del usuario:");
-        setRol(sc.nextLine());
-
-        System.out.println("Escribe la dirección del usuario:");
-        setDireccion(sc.nextLine());
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.actualizarUsuario(this);
-    }
-
-    // ===============================
-    // ELIMINAR USUARIO
-    // ===============================
-
-    public void eliminarUsuario() {
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.eliminarUsuario(this.getIdUsuario());
-
-    }
-
-    // ===============================
-    // CAMBIAR CONTRASEÑA
-    // ===============================
-
-    public void cambiarContrasena() {
-
-        System.out.println("Escribe la nueva contraseña:");
-        setContrasena(sc.nextLine());
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarContrasena(this.getIdUsuario(), this.getContrasena());
-
-    }
-
-    // ===============================
-    // CAMBIAR ROL
-    // ===============================
-
-    public void cambiarRol() {
-
-        System.out.println("Escribe el nuevo rol:");
-        setRol(sc.nextLine());
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarRol(this.getIdUsuario(), this.getRol());
-
-    }
-
-    // ===============================
-    // CAMBIAR DIRECCION
-    // ===============================
-
-    public void cambiarDireccion() {
-
-        System.out.println("Escribe la nueva dirección:");
-        setDireccion(sc.nextLine());
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO();
-        usuarioDAO.cambiarDireccion(this.getIdUsuario(), this.getDireccion());
-
-    }
-
 }

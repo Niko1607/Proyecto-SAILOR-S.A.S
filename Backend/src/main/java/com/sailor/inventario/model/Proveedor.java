@@ -1,93 +1,104 @@
 package com.sailor.inventario.model;
 
-import com.sailor.inventario.dao.ProveedorDAO;
-
-import java.util.Scanner;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Proveedor {
-    private int IdProveedor = 0;
-    private String Nombre_del_provedor_o_empresa;
-    private int Identificación;
-    private int Telefono;
-    private String Direccion;
-    private String Correo;
-    private String tipo_de_provedor;
+
+    private int idProveedor;
+    private String nombreProveedorEmpresa;
+    private String identificacion;
+    private String telefono;
+    private String direccion;
+    private String correo;
+    private String tipoProveedor;
     private boolean activo;
-    private String fecha_de_registro;
+    private String fechaRegistro;
+    private String ciudad;
 
-    private static Scanner sc = new Scanner(System.in);
-
-    public Proveedor(int IdProveedor, String Nombre_del_provedor_o_empresa, int Identificación, int Telefono, String Direccion, String Correo) {
-        this.IdProveedor = IdProveedor;
-        this.Nombre_del_provedor_o_empresa = Nombre_del_provedor_o_empresa;
-        this.Identificación = Identificación;
-        this.Telefono = Telefono;
-        this.Direccion = Direccion;
-        this.Correo = Correo;
-        this.tipo_de_provedor = "Proveedor";
+    public Proveedor(){
+        this.fechaRegistro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
         this.activo = true;
-        this.fecha_de_registro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
-    
-    public Proveedor() {
+
+    public Proveedor(int idProveedor, String nombreProveedorEmpresa, String identificacion,
+                     String telefono, String direccion, String correo,
+                     String tipoProveedor, boolean activo, String ciudad){
+
+        this.idProveedor = idProveedor;
+        this.nombreProveedorEmpresa = nombreProveedorEmpresa;
+        this.identificacion = identificacion;
+        this.telefono = telefono;
+        this.direccion = direccion;
+        this.correo = correo;
+        this.tipoProveedor = tipoProveedor;
+        this.activo = activo;
+        this.ciudad = ciudad;
+        this.fechaRegistro = new SimpleDateFormat("dd/MM/yyyy").format(new Date());
     }
 
     public int getIdProveedor() {
-        return IdProveedor;
+        return idProveedor; 
     }
 
-    public void setIdProveedor(int IdProveedor) {
-        this.IdProveedor = IdProveedor;
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
-    public String getNombre_del_provedor_o_empresa() {
-        return Nombre_del_provedor_o_empresa;
+    public String getNombreProveedorEmpresa() {
+        return nombreProveedorEmpresa;
     }
 
-    public void setNombre_del_provedor_o_empresa(String Nombre_del_provedor_o_empresa) {
-        this.Nombre_del_provedor_o_empresa = Nombre_del_provedor_o_empresa;
+    public void setNombreProveedorEmpresa(String nombreProveedorEmpresa) {
+        this.nombreProveedorEmpresa = nombreProveedorEmpresa;
     }
 
-    public int getIdentificación() {
-        return Identificación;
+    public String getIdentificacion() {
+        return identificacion;
     }
 
-    public void setIdentificación(int Identificación) {
-        this.Identificación = Identificación;
+    public void setIdentificacion(String identificacion) {
+        this.identificacion = identificacion;
     }
 
-    public int getTelefono() {
-        return Telefono;
+    public String getTelefono() {
+        return telefono;
     }
 
-    public void setTelefono(int Telefono) {
-        this.Telefono = Telefono;
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getDireccion() {
-        return Direccion;
+        return direccion;
     }
-
-    public void setDireccion(String Direccion) {
-        this.Direccion = Direccion;
+    
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
 
     public String getCorreo() {
-        return Correo;
+        return correo;
     }
 
-    public void setCorreo(String Correo) {
-        this.Correo = Correo;
+    public void setCorreo(String correo) {
+        this.correo = correo;
     }
 
-    public String getTipo_de_provedor() {
-        return tipo_de_provedor;
+    public String getTipoProveedor() {
+        return tipoProveedor;
+    }
+    
+    public void setTipoProveedor(String tipoProveedor) {
+        this.tipoProveedor = tipoProveedor;
     }
 
-    public void setTipo_de_provedor(String tipo_de_provedor) {
-        this.tipo_de_provedor = tipo_de_provedor;
+    public String getCiudad() {        
+        return ciudad;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
     }
 
     public boolean isActivo() {
@@ -95,230 +106,14 @@ public class Proveedor {
     }
 
     public void setActivo(boolean activo) {
-        this.activo = activo;
+        this.activo = activo;   
     }
 
-    public String getFecha_de_registro() {
-        return fecha_de_registro;
+    public String getFechaRegistro() {
+        return fechaRegistro;
     }
 
-    public void setFecha_de_registro(String fecha_de_registro) {
-        this.fecha_de_registro = fecha_de_registro;
-    }
-
-    // ===============================
-    // REGISTRAR PROVEEDOR
-    // ===============================
-
-    public void registrarProveedor() {
-
-        System.out.println("Escribe el nombre del proveedor:");
-        setNombre_del_provedor_o_empresa(sc.nextLine());
-
-        System.out.println("Escribe la identificación:");
-        setIdentificación(sc.nextInt());
-        sc.nextLine();
-
-        System.out.println("Escribe el telefono:");
-        setTelefono(sc.nextInt());
-        sc.nextLine();
-
-        System.out.println("Escribe la dirección:");
-        setDireccion(sc.nextLine());
-        sc.nextLine();
-
-        System.out.println("Escribe el correo:");
-        setCorreo(sc.nextLine());
-        sc.nextLine();
-
-        System.out.println("Escribe el tipo de proveedor:");
-        setTipo_de_provedor(sc.nextLine());
-        sc.nextLine();
-
-        System.out.println("Escribe si el proveedor está activo:");
-        setActivo(sc.nextBoolean());
-        sc.nextLine();
-
-        System.out.println("Escribe la fecha de registro:");
-        setFecha_de_registro(sc.nextLine());
-        sc.nextLine();
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.insertarProveedor(this);
-    }
-
-    // ===============================
-    // MOSTRAR PROVEEDOR
-    // ===============================
-
-    public void mostrarProveedor(int id) {
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        Proveedor proveedor = proveedorDAO.mostrarProveedor(id);
-
-        if(proveedor != null){
-            System.out.println("Nombre del proveedor: " + proveedor.getNombre_del_provedor_o_empresa());
-            System.out.println("Identificación: " + proveedor.getIdentificación());
-            System.out.println("Telefono: " + proveedor.getTelefono());
-            System.out.println("Dirección: " + proveedor.getDireccion());
-            System.out.println("Correo: " + proveedor.getCorreo());
-            System.out.println("Tipo de proveedor: " + proveedor.getTipo_de_provedor());
-            System.out.println("Activo: " + proveedor.isActivo());
-            System.out.println("Fecha de registro: " + proveedor.getFecha_de_registro());
-        } else {
-            System.out.println("Proveedor no encontrado");
-        }
-    }
-
-    // ===============================
-    // ACTUALIZAR PROVEEDOR
-    // ===============================
-
-    public void actualizarProveedor() {
-
-        System.out.println("Escribe el nombre del proveedor:");
-        setNombre_del_provedor_o_empresa(sc.nextLine());
-
-        System.out.println("Escribe la identificación:");
-        setIdentificación(sc.nextInt());
-        sc.nextLine();
-
-        System.out.println("Escribe el telefono:");
-        setTelefono(sc.nextInt());
-        sc.nextLine();
-
-        System.out.println("Escribe la dirección:");
-        setDireccion(sc.nextLine());
-        sc.nextLine();
-        
-        System.out.println("Escribe el correo:");
-        setCorreo(sc.nextLine());
-        sc.nextLine();
-        
-        System.out.println("Escribe el tipo de proveedor:");
-        setTipo_de_provedor(sc.nextLine());
-        sc.nextLine();
-        
-        System.out.println("Escribe si el proveedor está activo:");
-        setActivo(sc.nextBoolean());
-        sc.nextLine();
-        
-        System.out.println("Escribe la fecha de registro:");
-        setFecha_de_registro(sc.nextLine());
-        sc.nextLine();
-        
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.actualizarProveedor(this);
-    }   
-
-    // ===============================
-    // ELIMINAR PROVEEDOR
-    // ===============================
-
-    public void eliminarProveedor() {
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.eliminarProveedor(this.getIdProveedor());
-
-    }   
-
-    // ===============================
-    // CAMBIAR TELEFONO
-    // ===============================
-
-    public void cambiarTelefono() {
-
-        System.out.println("Escribe el nuevo telefono:");
-        setTelefono(sc.nextInt());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarTelefono(this.getIdProveedor(), this.getTelefono());
-
-    }   
-
-    // ===============================
-    // CAMBIAR DIRECCION
-    // ===============================
-
-    public void cambiarDireccion() {
-
-        System.out.println("Escribe la nueva dirección:");
-        setDireccion(sc.nextLine());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarDireccion(this.getIdProveedor(), this.getDireccion());
-
-    }   
-
-    // ===============================
-    // CAMBIAR CORREO
-    // ===============================
-
-    public void cambiarCorreo() {
-
-        System.out.println("Escribe la nueva dirección:");
-        setCorreo(sc.nextLine());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarCorreo(this.getIdProveedor(), this.getCorreo());
-
-    }
-
-    // ===============================
-    // CAMBIAR NOMBRE
-    // ===============================
-
-    public void cambiarNombre() {
-
-        System.out.println("Escribe el nuevo nombre:");
-        setNombre_del_provedor_o_empresa(sc.nextLine());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarNombre(this.getIdProveedor(), this.getNombre_del_provedor_o_empresa());
-
-    }
-
-    // ===============================
-    // CAMBIAR IDENTIFICACION
-    // ===============================
-
-    public void cambiarIdentificacion() {
-
-        System.out.println("Escribe el nuevo identificación:");
-        setIdentificación(sc.nextInt());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarIdentificacion(this.getIdProveedor(), this.getIdentificación());
-
-    }    
-
-    public void cambiarTipo_de_provedor() {
-
-        System.out.println("Escribe el nuevo tipo de proveedor:");
-        setTipo_de_provedor(sc.nextLine());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarTipo_de_provedor(this.getIdProveedor(), this.getTipo_de_provedor());
-
-    }
-
-    public void cambiarActivo() {
-
-        System.out.println("Escribe si el proveedor está activo:");
-        setActivo(sc.nextBoolean());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarActivo(this.getIdProveedor(), this.isActivo());
-
-    }
-
-    public void cambiarFecha_de_registro() {
-
-        System.out.println("Escribe la nueva fecha de registro:");
-        setFecha_de_registro(sc.nextLine());
-
-        ProveedorDAO proveedorDAO = new ProveedorDAO();
-        proveedorDAO.cambiarFecha_de_registro(this.getIdProveedor(), this.getFecha_de_registro());
-
+    public void setFechaRegistro(String fechaRegistro) {
+        this.fechaRegistro = fechaRegistro;
     }
 }

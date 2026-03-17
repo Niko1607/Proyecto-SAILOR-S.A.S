@@ -16,7 +16,7 @@ public class UsuarioDAO {
 
     public void insertarUsuario(Usuario usuarioObj) {
 
-        String sql = "INSERT INTO Usuarios (nombre, apellido, identificacion, correo, contrasena, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios (nombre, apellido, identificacion, correo, contraseña, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -25,7 +25,7 @@ public class UsuarioDAO {
             pstmt.setString(2, usuarioObj.getApellido());
             pstmt.setInt(3, usuarioObj.getIdentificacion());
             pstmt.setString(4, usuarioObj.getCorreo());
-            pstmt.setString(5, usuarioObj.getContrasena());
+            pstmt.setString(5, usuarioObj.getContraseña());
             pstmt.setString(6, usuarioObj.getRol());
             pstmt.setString(7, usuarioObj.getDireccion());
 
@@ -60,12 +60,12 @@ public class UsuarioDAO {
 
                 usuario = new Usuario();
 
-                usuario.setId(rs.getInt("idUsuario"));
+                usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellido(rs.getString("apellido"));
                 usuario.setIdentificacion(rs.getInt("identificacion"));
                 usuario.setCorreo(rs.getString("correo"));
-                usuario.setContrasena(rs.getString("contrasena"));
+                usuario.setContraseña(rs.getString("contrasena"));
                 usuario.setRol(rs.getString("rol"));
                 usuario.setDireccion(rs.getString("direccion"));
 
@@ -138,7 +138,7 @@ public class UsuarioDAO {
     // CAMBIAR CONTRASEÑA
     // =========================
 
-    public void cambiarContrasena(int IdUsuario, String nuevaContraseña) {
+    public void cambiarContraseña(int IdUsuario, String nuevaContraseña) {
 
         String sql = "UPDATE usuarios SET contraseña=? WHERE idUsuario=?";
 
