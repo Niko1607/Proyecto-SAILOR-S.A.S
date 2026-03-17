@@ -22,13 +22,14 @@ public class ProveedorDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, proveedorObj.getNombre_del_provedor_o_empresa());
-            pstmt.setInt(2, proveedorObj.getIdentificación());
-            pstmt.setInt(3, proveedorObj.getTelefono());
+            pstmt.setString(2, proveedorObj.getIdentificación());
+            pstmt.setString(3, proveedorObj.getTelefono());
             pstmt.setString(4, proveedorObj.getDireccion());
             pstmt.setString(5, proveedorObj.getCorreo());
             pstmt.setString(6, proveedorObj.getTipo_de_provedor());
             pstmt.setBoolean(7, proveedorObj.isActivo());
-            pstmt.setString(8, proveedorObj.getFecha_de_registro());
+            pstmt.setString(8, proveedorObj.getFechaRegistro());
+            pstmt.setString(9, proveedorObj.getCiudad());
 
             pstmt.executeUpdate();
 
@@ -63,13 +64,14 @@ public class ProveedorDAO {
 
                 proveedor.setIdProveedor(rs.getInt("id"));
                 proveedor.setNombre_del_provedor_o_empresa(rs.getString("nombre"));
-                proveedor.setIdentificación(rs.getInt("identificacion"));
-                proveedor.setTelefono(rs.getInt("telefono"));
+                proveedor.setIdentificación(rs.getString("identificacion"));
+                proveedor.setTelefono(rs.getString("telefono"));
                 proveedor.setDireccion(rs.getString("direccion"));
                 proveedor.setCorreo(rs.getString("correo"));
                 proveedor.setTipo_de_provedor(rs.getString("tipo_de_proveedor"));
                 proveedor.setActivo(rs.getBoolean("activo"));
-                proveedor.setFecha_de_registro(rs.getString("fecha_de_registro"));
+                proveedor.setFechaRegistro(rs.getString("fecha_de_registro"));
+                proveedor.setCiudad(rs.getString("ciudad"));
 
             }
 
@@ -94,14 +96,15 @@ public class ProveedorDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, proveedorObj.getNombre_del_provedor_o_empresa());
-            pstmt.setInt(2, proveedorObj.getIdentificación());
-            pstmt.setInt(3, proveedorObj.getTelefono());
+            pstmt.setString(2, proveedorObj.getIdentificación());
+            pstmt.setString(3, proveedorObj.getTelefono());
             pstmt.setString(4, proveedorObj.getDireccion());
             pstmt.setString(5, proveedorObj.getCorreo());
             pstmt.setInt(6, proveedorObj.getIdProveedor());
             pstmt.setString(7, proveedorObj.getTipo_de_provedor());
             pstmt.setBoolean(8, proveedorObj.isActivo());
-            pstmt.setString(9, proveedorObj.getFecha_de_registro());
+            pstmt.setString(9, proveedorObj.getFechaRegistro());
+            pstmt.setString(10, proveedorObj.getCiudad());
 
             pstmt.executeUpdate();
 
@@ -142,14 +145,14 @@ public class ProveedorDAO {
     // CAMBIAR TELEFONO
     // =========================
 
-    public void cambiarTelefono(int id, int telefono) {
+    public void cambiarTelefono(int id, String telefono) {
 
         String sql = "UPDATE proveedores SET telefono=? WHERE id=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, telefono);
+            pstmt.setString(1, telefono);
             pstmt.setInt(2, id);
 
             pstmt.executeUpdate();
@@ -235,14 +238,14 @@ public class ProveedorDAO {
     // CAMBIAR IDENTIFICACION
     // =========================
 
-    public void cambiarIdentificacion(int id, int identificacion) {
+    public void cambiarIdentificacion(int id, String identificacion) {
 
         String sql = "UPDATE proveedores SET identificacion=? WHERE id=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1, identificacion);
+            pstmt.setString(1, identificacion);
             pstmt.setInt(2, id);
 
             pstmt.executeUpdate();
@@ -320,6 +323,29 @@ public class ProveedorDAO {
 
         } catch (SQLException e) {
             System.out.println("Error al cambiar activo: " + e.getMessage());
+        }
+    }
+
+    // =========================
+    // CAMBIAR CIUDAD
+    // =========================
+
+    public void cambiarCiudad(int id, String ciudad) {
+
+        String sql = "UPDATE proveedores SET ciudad=? WHERE id=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, ciudad);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+
+            System.out.println("Ciudad actualizada");
+
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar ciudad: " + e.getMessage());
         }
     }
 }
