@@ -6,7 +6,7 @@ CREATE TABLE Usuarios(
 	apellido VARCHAR(50) NOT NULL,
 	correo VARCHAR(50) NOT NULL,
     identificacion INT NOT NULL,
-	constrasena VARCHAR(50) NOT NULL,
+	password VARCHAR(50) NOT NULL,
     rol VARCHAR(50) NOT NULL,
     direccion VARCHAR(50) NOT NULL,
 	PRIMARY KEY(idUsuario)
@@ -17,25 +17,21 @@ CREATE TABLE Venta(
     idUsuario INT NOT NULL,
     fecha DATE NOT NULL,
     precio DECIMAL(10,2) NOT NULL,
+    estado BOOLEAN NOT NULL,
     PRIMARY KEY(idVenta),
     FOREIGN KEY(idUsuario) REFERENCES Usuarios(idUsuario)
 );
 
 CREATE TABLE Productos (
-    idProducto INT NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL,
-    precio DECIMAL(10,2) NOT NULL,
-    descripcion TEXT NOT NULL,
+    idProducto INT AUTO_INCREMENT PRIMARY KEY,
+    nombreProducto VARCHAR(100) NOT NULL,
+    descripcion VARCHAR(500),
+    precioProducto DOUBLE NOT NULL,
     cantidad INT NOT NULL,
-    stock_minimo BOOLEAN NOT NULL,
-    stock_maximo BOOLEAN NOT NULL,
-    fecha_de_registro DATE NOT NULL,
-    activo BOOLEAN NOT NULL,
-    idCategoria INT NOT NULL,
-    idProveedor INT NOT NULL,
-    PRIMARY KEY (idProducto),
-    FOREIGN KEY (idCategoria) REFERENCES Categorias(idCategoria) on delete cascade,
-    FOREIGN KEY (idProveedor) REFERENCES Proveedores(idProveedor) on delete cascade
+    stockMinimo INT,
+    stockMaximo INT,
+    fechaRegistro DATE,
+    activo BOOLEAN
 );
 
 CREATE TABLE Categorias(
@@ -45,26 +41,39 @@ CREATE TABLE Categorias(
 );
 
 CREATE TABLE Proveedores(
-    idProveedor INT NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL,
-    apellido VARCHAR(50) NOT NULL,
-    email VARCHAR(50) NOT NULL,
+    idProveedor INT AUTO_INCREMENT,
+    nombreProveedorEmpresa VARCHAR(50) NOT NULL,
+    identificacion VARCHAR(50) NOT NULL,
     telefono VARCHAR(50) NOT NULL,
-    direccion VARCHAR(50) NOT NULL,
-    tipoDeProveedor VARCHAR(50) NOT NULL,
+    direccion VARCHAR(500) NOT NULL,
+    correo VARCHAR(50) NOT NULL,
+    tipoProveedor VARCHAR(50) NOT NULL,
     activo BOOLEAN NOT NULL,
-    fechaDeRegistro DATE NOT NULL,
+    ciudad VARCHAR(50) NOT NULL,
+    fechaRegistro DATE NOT NULL,
     PRIMARY KEY(idProveedor)
 );
 
-CREATE TABLE DetalleVenta(
-    idDetalleVenta INT NOT NULL AUTO_INCREMENT,
-    idVenta INT NOT NULL,
-    idProducto INT NOT NULL,
-    cantidad INT NOT NULL,
-    precio DECIMAL(10,2) NOT NULL,
-    PRIMARY KEY(idDetalleVenta),
-    FOREIGN KEY(idVenta) REFERENCES Venta(idVenta),
-    FOREIGN KEY(idProducto) REFERENCES Productos(idProducto)
+CREATE TABLE detalleventa (
+
+    idDetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
+    idVenta INT,
+    idProducto INT,
+    cantidad INT,
+    precioUnitario DOUBLE,
+    subtotal DOUBLE,
+    FOREIGN KEY (idVenta) REFERENCES venta(idVenta),
+    FOREIGN KEY (idProducto) REFERENCES productos(idProducto)
 );
-ALTER TABLE usuarios CHANGE contrasena contrasena VARCHAR(50) NOT NULL;
+
+CREATE TABLE Inventario(
+    idInventario INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    idProducto INT NOT NULL,
+    idUsuario INT NOT NULL,
+    cantidad INT NOT NULL,
+    fechaMovimiento DATE NOT NULL,
+    FOREIGN KEY(idProducto) REFERENCES Productos(idProducto),
+    FOREIGN KEY(idUsuario) REFERENCES Usuarios(idUsuario)
+);
+
+

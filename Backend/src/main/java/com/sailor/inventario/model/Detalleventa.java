@@ -9,6 +9,10 @@ public class Detalleventa {
     private double PrecioUnitario;
     private double subTotal;
 
+    public Detalleventa() {
+
+    }
+
     public Detalleventa(int IdDetalleVenta, Venta venta, Producto producto, int Cantidad, double PrecioUnitario, double subTotal) {
         this.IdDetalleVenta = IdDetalleVenta;
         this.venta = venta;

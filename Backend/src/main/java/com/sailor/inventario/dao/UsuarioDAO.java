@@ -16,16 +16,16 @@ public class UsuarioDAO {
 
     public void insertarUsuario(Usuario usuarioObj) {
 
-        String sql = "INSERT INTO Usuarios (nombre, apellido, identificacion, correo, contraseña, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Usuarios (nombre, apellido, identificacion, correo, password, rol, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, usuarioObj.getNombre());
             pstmt.setString(2, usuarioObj.getApellido());
-            pstmt.setInt(3, usuarioObj.getIdentificacion());
+            pstmt.setString(3, usuarioObj.getIdentificacion());
             pstmt.setString(4, usuarioObj.getCorreo());
-            pstmt.setString(5, usuarioObj.getContraseña());
+            pstmt.setString(5, usuarioObj.getPassword());
             pstmt.setString(6, usuarioObj.getRol());
             pstmt.setString(7, usuarioObj.getDireccion());
 
@@ -63,9 +63,9 @@ public class UsuarioDAO {
                 usuario.setIdUsuario(rs.getInt("idUsuario"));
                 usuario.setNombre(rs.getString("nombre"));
                 usuario.setApellido(rs.getString("apellido"));
-                usuario.setIdentificacion(rs.getInt("identificacion"));
+                usuario.setIdentificacion(rs.getString("identificacion"));
                 usuario.setCorreo(rs.getString("correo"));
-                usuario.setContraseña(rs.getString("contrasena"));
+                usuario.setPassword(rs.getString("password"));
                 usuario.setRol(rs.getString("rol"));
                 usuario.setDireccion(rs.getString("direccion"));
 
@@ -86,23 +86,26 @@ public class UsuarioDAO {
 
     public void actualizarUsuario(Usuario usuarioObj) {
 
-        String sql = "UPDATE usuarios SET nombre=?, apellido=?, identificacion=?, correo=?, rol=?, direccion=? WHERE id=?";
+        String sql = "UPDATE usuarios SET nombre=?, apellido=?, identificacion=?, correo=?, rol=?, direccion=? WHERE idUsuario=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, usuarioObj.getNombre());
             pstmt.setString(2, usuarioObj.getApellido());
-            pstmt.setInt(3, usuarioObj.getIdentificacion());
+            pstmt.setString(3, usuarioObj.getIdentificacion());
             pstmt.setString(4, usuarioObj.getCorreo());
             pstmt.setString(5, usuarioObj.getRol());
             pstmt.setString(6, usuarioObj.getDireccion());
             pstmt.setInt(7, usuarioObj.getIdUsuario());
 
-            pstmt.executeUpdate();
+            int filas = pstmt.executeUpdate();
 
-            System.out.println("Usuario actualizado correctamente");
-
+            if (filas > 0) {
+                System.out.println("Usuario actualizado correctamente");
+            } else {
+                System.out.println("No se encontro usuario");
+            }
         } catch (SQLException e) {
 
             System.out.println("Error al actualizar usuario: " + e.getMessage());
@@ -140,7 +143,7 @@ public class UsuarioDAO {
 
     public void cambiarContraseña(int IdUsuario, String nuevaContraseña) {
 
-        String sql = "UPDATE usuarios SET contraseña=? WHERE idUsuario=?";
+        String sql = "UPDATE usuarios SET password=? WHERE idUsuario=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -190,7 +193,7 @@ public class UsuarioDAO {
 
     public void cambiarDireccion(int IdUsuario, String direccion) {
 
-        String sql = "UPDATE usuarios SET direccion=? WHERE id=?";
+        String sql = "UPDATE usuarios SET direccion=? WHERE idUsuario=?";
 
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
