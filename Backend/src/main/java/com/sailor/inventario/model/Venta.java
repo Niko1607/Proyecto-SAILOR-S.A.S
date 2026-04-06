@@ -36,6 +36,11 @@ public class Venta {
         return fecha;
     }
 
+    // 🔧 ESTE FALTABA
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
     public int getIdUsuario() {
         return idUsuario;
     }

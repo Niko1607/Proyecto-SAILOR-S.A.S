@@ -2,28 +2,19 @@ package com.sailor.inventario.model;
 
 public class Detalleventa {
 
-    private int IdDetalleVenta;
+    private int idDetalleVenta;
     private Venta venta;
     private Producto producto;
-    private int Cantidad;
-    private double PrecioUnitario;
-    private double subTotal;
-
-    public Detalleventa(int IdDetalleVenta, Venta venta, Producto producto, int Cantidad, double PrecioUnitario, double subTotal) {
-        this.IdDetalleVenta = IdDetalleVenta;
-        this.venta = venta;
-        this.producto = producto;
-        this.Cantidad = Cantidad;
-        this.PrecioUnitario = PrecioUnitario;
-        this.subTotal = subTotal;
-    }
+    private int cantidad;
+    private double precioUnitario;
+    private double subtotal;
 
     public int getIdDetalleVenta() {
-        return IdDetalleVenta;
+        return idDetalleVenta;
     }
 
-    public void setIdDetalleVenta(int IdDetalleVenta) {
-        this.IdDetalleVenta = IdDetalleVenta;
+    public void setIdDetalleVenta(int idDetalleVenta) {
+        this.idDetalleVenta = idDetalleVenta;
     }
 
     public Venta getVenta() {
@@ -43,26 +34,26 @@ public class Detalleventa {
     }
 
     public int getCantidad() {
-        return Cantidad;
+        return cantidad;
     }
 
-    public void setCantidad(int Cantidad) {
-        this.Cantidad = Cantidad;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public double getPrecioUnitario() {
-        return PrecioUnitario;
+        return precioUnitario;
     }
 
-    public void setPrecioUnitario(double PrecioUnitario) {
-        this.PrecioUnitario = PrecioUnitario;
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
     }
 
-    public double getSubTotal() {
-        return subTotal;
+    public double getSubtotal() {
+        return subtotal;
     }
 
-    public void setSubTotal(double subTotal) {
-        this.subTotal = subTotal;
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal;
     }
 }

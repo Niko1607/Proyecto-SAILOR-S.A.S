@@ -9,89 +9,149 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class InventarioDAO {
-    private Connection conexion;
-    private PreparedStatement pstmt;
-    private ResultSet rs;
 
-    public InventarioDAO() {
-        this.conexion = ConexionMySQL.getConnection();
-    }
+    // =========================
+    // REGISTRAR INVENTARIO
+    // =========================
+    public void registrarInventario(Inventario inventario) {
 
-    public void registrarInventario(Inventario inventario) {        
-        try {
-            pstmt = conexion.prepareStatement("INSERT INTO inventario (idUsuario, fecha, precio) VALUES (?, ?, ?)");
-            pstmt.setInt(1, inventario.getUsuario().getIdUsuario());
-            pstmt.setString(2, inventario.getFecha());
-            pstmt.setDouble(3, inventario.getPrecio());
+        String sql = "INSERT INTO inventario (idProducto, idUsuario, cantidad, fechaMovimiento) VALUES (?, ?, ?, ?)";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, inventario.getProducto().getIdProducto());
+            pstmt.setInt(2, inventario.getUsuario().getIdUsuario());
+            pstmt.setInt(3, inventario.getCantidad());
+            pstmt.setString(4, inventario.getFechaMovimiento());
+
             pstmt.executeUpdate();
+
             System.out.println("Inventario registrado correctamente");
+
         } catch (SQLException e) {
             System.out.println("Error al registrar inventario: " + e.getMessage());
         }
     }
 
-    public void mostrarInventario(int id) {
-        try {
-            pstmt = conexion.prepareStatement("SELECT * FROM inventario WHERE id = ?");
+    // =========================
+    // MOSTRAR INVENTARIO
+    // =========================
+    public Inventario mostrarInventario(int id) {
+
+        String sql = "SELECT * FROM inventario WHERE idInventario = ?";
+        Inventario inventario = null;
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setInt(1, id);
-            rs = pstmt.executeQuery();
+
+            ResultSet rs = pstmt.executeQuery();
+
             if (rs.next()) {
-                Inventario inventario = new Inventario();
-                inventario.setIdUsuario(rs.getInt("idUsuario"));
-                inventario.setFecha(rs.getString("fecha"));
-                inventario.setPrecio(rs.getDouble("precio"));
+
+                inventario = new Inventario();
+
+                inventario.setIdInventario(rs.getInt("idInventario"));
+                inventario.setCantidad(rs.getInt("cantidad"));
+                inventario.setFechaMovimiento(rs.getString("fechaMovimiento"));
+
             }
+
         } catch (SQLException e) {
             System.out.println("Error al buscar inventario: " + e.getMessage());
         }
+
+        return inventario;
     }
 
+    // =========================
+    // ACTUALIZAR INVENTARIO
+    // =========================
     public void actualizarInventario(Inventario inventario) {
-    String sql = "UPDATE inventario SET fecha=?, precio=? WHERE id=?";
-    try (PreparedStatement pstmt = conexion.prepareStatement(sql)) {
-        pstmt.setString(1, inventario.getFecha());
-        pstmt.setDouble(2, inventario.getPrecio());
-        pstmt.setInt(3, inventario.getIdInventario());
-        pstmt.executeUpdate();
-        System.out.println("Inventario actualizado correctamente");
-    } catch (SQLException e) {
-        System.out.println("Error al actualizar inventario: " + e.getMessage());
-    }
-}
 
+        String sql = "UPDATE inventario SET cantidad=?, fechaMovimiento=? WHERE idInventario=?";
 
-    public void eliminarInventario(int id) {
-        try {
-            pstmt = conexion.prepareStatement("DELETE FROM inventario WHERE id=?");
-            pstmt.setInt(1, id);
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, inventario.getCantidad());
+            pstmt.setString(2, inventario.getFechaMovimiento());
+            pstmt.setInt(3, inventario.getIdInventario());
+
             pstmt.executeUpdate();
+
+            System.out.println("Inventario actualizado correctamente");
+
+        } catch (SQLException e) {
+            System.out.println("Error al actualizar inventario: " + e.getMessage());
+        }
+    }
+
+    // =========================
+    // ELIMINAR INVENTARIO
+    // =========================
+    public void eliminarInventario(int id) {
+
+        String sql = "DELETE FROM inventario WHERE idInventario=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, id);
+
+            pstmt.executeUpdate();
+
             System.out.println("Inventario eliminado correctamente");
+
         } catch (SQLException e) {
             System.out.println("Error al eliminar inventario: " + e.getMessage());
         }
     }
 
+    // =========================
+    // CAMBIAR CANTIDAD
+    // =========================
+    public void cambiarCantidad(int id, int cantidad) {
+
+        String sql = "UPDATE inventario SET cantidad=? WHERE idInventario=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setInt(1, cantidad);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+
+            System.out.println("Cantidad actualizada");
+
+        } catch (SQLException e) {
+            System.out.println("Error al cambiar cantidad: " + e.getMessage());
+        }
+    }
+
+    // =========================
+    // CAMBIAR FECHA
+    // =========================
     public void cambiarFecha(int id, String fecha) {
-        try {
-            pstmt = conexion.prepareStatement("UPDATE inventario SET fecha=? WHERE id=?");
+
+        String sql = "UPDATE inventario SET fechaMovimiento=? WHERE idInventario=?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
             pstmt.setString(1, fecha);
             pstmt.setInt(2, id);
+
             pstmt.executeUpdate();
+
             System.out.println("Fecha actualizada");
+
         } catch (SQLException e) {
             System.out.println("Error al cambiar fecha: " + e.getMessage());
         }
     }
-
-    public void cambiarPrecio(int id, double precio) {
-        try {
-            pstmt = conexion.prepareStatement("UPDATE inventario SET precio=? WHERE id=?");
-            pstmt.setDouble(1, precio);
-            pstmt.setInt(2, id);
-            pstmt.executeUpdate();
-            System.out.println("Precio actualizado");
-        } catch (SQLException e) {
-            System.out.println("Error al cambiar precio: " + e.getMessage());
-        }
-    }
 }
+
