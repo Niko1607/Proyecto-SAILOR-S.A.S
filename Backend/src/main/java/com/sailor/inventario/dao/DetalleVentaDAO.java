@@ -2,6 +2,8 @@ package com.sailor.inventario.dao;
 
 import com.sailor.inventario.config.ConexionMySQL;
 import com.sailor.inventario.model.Detalleventa;
+import com.sailor.inventario.model.Venta;
+import com.sailor.inventario.model.Producto;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,7 +23,7 @@ public class DetalleVentaDAO {
             pstmt.setInt(2, detalle.getProducto().getIdProducto());
             pstmt.setInt(3, detalle.getCantidad());
             pstmt.setDouble(4, detalle.getPrecioUnitario());
-            pstmt.setDouble(5, detalle.getSubTotal());
+            pstmt.setDouble(5, detalle.getSubtotal());
 
             pstmt.executeUpdate();
 
@@ -43,7 +45,7 @@ public class DetalleVentaDAO {
             pstmt.setInt(2, detalle.getProducto().getIdProducto());
             pstmt.setInt(3, detalle.getCantidad());
             pstmt.setDouble(4, detalle.getPrecioUnitario());
-            pstmt.setDouble(5, detalle.getSubTotal());
+            pstmt.setDouble(5, detalle.getSubtotal());
             pstmt.setInt(6, detalle.getIdDetalleVenta());
 
             pstmt.executeUpdate();
@@ -74,34 +76,47 @@ public class DetalleVentaDAO {
     }
 
     public Detalleventa mostrarDetalle(int id) {
-    String sql = "SELECT * FROM detalleventa WHERE idDetalleVenta=?";
 
-    try (Connection conn = ConexionMySQL.getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        String sql = "SELECT * FROM detalleventa WHERE idDetalleVenta=?";
 
-        pstmt.setInt(1, id);
+        try (Connection conn = ConexionMySQL.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-        try (ResultSet rs = pstmt.executeQuery()) {
-            if (rs.next()) {
-                Detalleventa detalle = new Detalleventa();
-                detalle.setIdDetalleVenta(rs.getInt("idDetalleVenta"));
-                detalle.setVenta(rs.getInt("idVenta"));
-                detalle.setIdProducto(rs.getInt("idProducto"));
-                detalle.setCantidad(rs.getInt("cantidad"));
-                detalle.setPrecioUnitario(rs.getDouble("precioUnitario"));
-                detalle.setSubtotal(rs.getDouble("subtotal"));
+            pstmt.setInt(1, id);
 
-                return detalle; // ✅ devolvemos el objeto
-            } else {
-                System.out.println("Detalle no encontrado");
-                return null; // ✅ devolvemos null si no existe
+            try (ResultSet rs = pstmt.executeQuery()) {
+
+                if (rs.next()) {
+
+                    Detalleventa detalle = new Detalleventa();
+
+                    detalle.setIdDetalleVenta(rs.getInt("idDetalleVenta"));
+
+                    // 🔥 CREAR OBJETO VENTA
+                    Venta venta = new Venta();
+                    venta.setIdVenta(rs.getInt("idVenta"));
+                    detalle.setVenta(venta);
+
+                    // 🔥 CREAR OBJETO PRODUCTO
+                    Producto producto = new Producto();
+                    producto.setIdProducto(rs.getInt("idProducto"));
+                    detalle.setProducto(producto);
+
+                    detalle.setCantidad(rs.getInt("cantidad"));
+                    detalle.setPrecioUnitario(rs.getDouble("precioUnitario"));
+                    detalle.setSubtotal(rs.getDouble("subtotal"));
+
+                    return detalle;
+
+                } else {
+                    System.out.println("Detalle no encontrado");
+                    return null;
+                }
             }
+
+        } catch (SQLException e) {
+            System.out.println("Error al mostrar detalle: " + e.getMessage());
+            return null;
         }
-
-    } catch (SQLException e) {
-        System.out.println("Error al mostrar detalle: " + e.getMessage());
-        return null; // ✅ devolvemos null en caso de error
     }
-}
-
 } 

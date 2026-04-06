@@ -1,6 +1,5 @@
 package com.sailor.inventario.dao;
 
-import com.sailor.inventario.model.Inventario;
 import com.sailor.inventario.model.Venta;
 import com.sailor.inventario.config.ConexionMySQL;
 import java.sql.Connection;

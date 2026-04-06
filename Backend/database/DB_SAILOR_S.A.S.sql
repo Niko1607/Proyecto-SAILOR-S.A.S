@@ -1,5 +1,3 @@
-USE db_sailor_s.a.s;
-
 CREATE TABLE Usuarios(
 	idUsuario INT NOT NULL AUTO_INCREMENT,
 	nombre VARCHAR(50) NOT NULL,
@@ -32,14 +30,7 @@ CREATE TABLE Productos (
     stockMaximo INT,
     fechaRegistro DATE,
     activo BOOLEAN
-);
-
-CREATE TABLE Categorias(
-    idCategoria INT NOT NULL AUTO_INCREMENT,
-    nombre VARCHAR(50) NOT NULL,
-    PRIMARY KEY(idCategoria)
-);
-
+); 
 CREATE TABLE Proveedores(
     idProveedor INT AUTO_INCREMENT,
     nombreProveedorEmpresa VARCHAR(50) NOT NULL,
