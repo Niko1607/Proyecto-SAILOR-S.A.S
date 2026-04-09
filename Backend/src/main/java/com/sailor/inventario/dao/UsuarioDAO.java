@@ -11,6 +11,38 @@ import org.mindrot.jbcrypt.BCrypt;
 
 public class UsuarioDAO {
 
+    public Usuario login(String correo, String password) {
+         Usuario usuario = null;
+        String sql = "SELECT * FROM usuarios WHERE correo = ?";
+
+        try (Connection conn = ConexionMySQL.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, correo);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+
+                String passwordHash = rs.getString("password");
+
+                if (BCrypt.checkpw(password, passwordHash)) {
+
+                    usuario = new Usuario();
+                    usuario.setIdUsuario(rs.getInt("idUsuario"));
+                    usuario.setNombre(rs.getString("nombre"));
+                    usuario.setCorreo(rs.getString("correo"));
+                    usuario.setRol(rs.getString("rol")); // 🔥 AQUÍ ya lo tienes
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error en el login: " + e.getMessage());
+        }
+
+        return usuario;
+    }
+    
     // =========================
     // INSERTAR USUARIO
     // =========================
@@ -112,10 +144,13 @@ public class UsuarioDAO {
         try (Connection conn = ConexionMySQL.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
+            String passwordHash = BCrypt.hashpw(usuarioObj.getPassword(), BCrypt.gensalt());
+
             pstmt.setString(1, usuarioObj.getNombre());
             pstmt.setString(2, usuarioObj.getApellido());
             pstmt.setString(3, usuarioObj.getIdentificacion());
             pstmt.setString(4, usuarioObj.getCorreo());
+            pstmt.setString(5, passwordHash);
             pstmt.setString(5, usuarioObj.getRol());
             pstmt.setString(6, usuarioObj.getDireccion());
             pstmt.setInt(7, usuarioObj.getIdUsuario());
@@ -156,127 +191,5 @@ public class UsuarioDAO {
             System.out.println("Error al eliminar usuario: " + e.getMessage());
 
         }
-    }
-
-    // =========================
-    // CAMBIAR CONTRASEÑA
-    // =========================
-
-    public void cambiarContraseña(int IdUsuario, String nuevaContraseña) {
-
-        String sql = "UPDATE usuarios SET password=? WHERE idUsuario=?";
-
-        try (Connection conn = ConexionMySQL.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // 🔥 HASH TAMBIÉN AQUÍ
-            String passwordHash = BCrypt.hashpw(nuevaContraseña, BCrypt.gensalt());
-
-            pstmt.setString(1, passwordHash);
-            pstmt.setInt(2, IdUsuario);
-
-            pstmt.executeUpdate();
-
-            System.out.println("Contraseña actualizada");
-
-        } catch (SQLException e) {
-            System.out.println("Error al cambiar contraseña: " + e.getMessage());
-        }
-    }
-
-    // =========================
-    // CAMBIAR ROL
-    // =========================
-
-    public void cambiarRol(int IdUsuario, String rol) {
-
-        String sql = "UPDATE usuarios SET rol=? WHERE idUsuario=?";
-
-        try (Connection conn = ConexionMySQL.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, rol);
-            pstmt.setInt(2, IdUsuario);
-
-            pstmt.executeUpdate();
-
-            System.out.println("Rol actualizado");
-
-        } catch (SQLException e) {
-
-            System.out.println("Error al cambiar rol: " + e.getMessage());
-
-        }
-    }
-
-    // =========================
-    // CAMBIAR DIRECCION
-    // =========================
-
-    public void cambiarDireccion(int IdUsuario, String direccion) {
-
-        String sql = "UPDATE usuarios SET direccion=? WHERE idUsuario=?";
-
-        try (Connection conn = ConexionMySQL.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, direccion);
-            pstmt.setInt(2, IdUsuario);
-
-            pstmt.executeUpdate();
-
-            System.out.println("Dirección actualizada");
-
-        } catch (SQLException e) {
-            System.out.println("Error al cambiar dirección: " + e.getMessage());
-        }
-    }
-
-    // =========================
-    // Autenticar usuario
-    // =========================
-
-    public Usuario login(String correo, String password) {
-
-    // 🔥 VALIDACIÓN
-        if(correo.isEmpty() || password.isEmpty()){
-            System.out.println("Campos vacíos");
-            return null;
-        }
-
-        String sql = "SELECT * FROM usuarios WHERE correo = ?";
-        Usuario usuario = null;
-
-        try (Connection conn = ConexionMySQL.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-        pstmt.setString(1, correo);
-
-            ResultSet rs = pstmt.executeQuery();
-
-            if (rs.next()) {
-
-                String passwordHash = rs.getString("password");
-
-            // 🔐 COMPARACIÓN SEGURA
-                if (BCrypt.checkpw(password, passwordHash)) {
-
-                    usuario = new Usuario();
-
-                    usuario.setIdUsuario(rs.getInt("idUsuario"));
-                    usuario.setNombre(rs.getString("nombre"));
-                    usuario.setApellido(rs.getString("apellido"));
-                    usuario.setIdentificacion(rs.getString("identificacion"));
-                    usuario.setCorreo(rs.getString("correo"));
-                    usuario.setRol(rs.getString("rol"));
-                    usuario.setDireccion(rs.getString("direccion"));
-                    }
-                }   
-
-            } catch (SQLException e) {
-                System.out.println("Error en login: " + e.getMessage());
-            }
-
-            return usuario;
     }
 }
