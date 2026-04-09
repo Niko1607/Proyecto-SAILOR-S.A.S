@@ -15,6 +15,32 @@ public class ProveedorDAO {
     // =========================
 
     public void registrarProveedor(Proveedor proveedorObj) {
+    if (proveedorObj.getNombreProveedorEmpresa().isEmpty() ||
+        proveedorObj.getIdentificacion().isEmpty() ||
+        proveedorObj.getTelefono().isEmpty() ||
+        proveedorObj.getDireccion().isEmpty() ||
+        proveedorObj.getCorreo().isEmpty() ||
+        proveedorObj.getTipoProveedor().isEmpty() ||
+        proveedorObj.getCiudad().isEmpty()){
+        System.out.println("Campos vacíos");
+        return;
+    }
+
+    if(!proveedorObj.getCorreo().contains("@")){
+        System.out.println("Correo inválido");
+        return;
+    }
+    
+    if(proveedorObj.getCiudad().length() < 3){
+        System.out.println("La ciudad debe tener mínimo 3 caracteres");
+        return;
+    }   
+
+    if(proveedorObj.getTipoProveedor().length() < 3){
+        System.out.println("El tipo de proveedor debe tener mínimo 3 caracteres");
+        return;
+    }   
+
 
         String sql = "INSERT INTO proveedores (nombreProveedorEmpresa, identificacion, telefono, direccion, correo, tipoProveedor, activo, fechaRegistro, ciudad) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 

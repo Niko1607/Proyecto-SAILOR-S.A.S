@@ -29,12 +29,12 @@ public class sistema {
             System.out.println("\n========== MENU PRINCIPAL ==========");
             System.out.println("1. Login");
             System.out.println("2. Menu Usuario");
-            System.out.println("2. Menu Proveedor");
-            System.out.println("2. Menu Producto");
-            System.out.println("2. Menu Inventario");
-            System.out.println("2. Registrar Venta");
-            System.out.println("2. Menu Detalle Venta");
-            System.out.println("3. Salir");
+            System.out.println("3. Menu Proveedor");
+            System.out.println("4. Menu Producto");
+            System.out.println("5. Menu Inventario");
+            System.out.println("6. Registrar Venta");
+            System.out.println("7. Menu Detalle Venta");
+            System.out.println("8. Salir");
             System.out.print("Opcion: ");
 
             opcion = Integer.parseInt(sc.nextLine());
@@ -44,11 +44,25 @@ public class sistema {
                     login();
                     break;
                 case 2:
-                    menuDetalleVenta();
+                    menuUsuario();
                     break;
                 case 3:
-                    System.out.println("Saliendo...");
+                    menuProveedor();
                     break;
+                case 4:
+                    menuProducto();
+                    break;
+                case 5:
+                    menuInventario();
+                    break;
+                case 6:
+                    menuVenta();
+                    break;
+                case 7:
+                    menuDetalleVenta();
+                    break;
+                case 8:
+                    System.out.println("Saliendo...");
                 default:
                     System.out.println("Opcion invalida");
             }
@@ -68,6 +82,9 @@ public class sistema {
 
         System.out.print("Password: ");
         String password = sc.nextLine();
+
+        System.out.println("Rol de usuario: ");
+        String rol = sc.nextLine();
 
         Usuario usuario = usuarioDAO.login(correo, password);
 
@@ -118,20 +135,34 @@ public class sistema {
     }
 
     void registrarUsuario() {
+
         UsuarioDAO dao = new UsuarioDAO();
         Usuario usuario = new Usuario();
-        System.out.print("Correo: ");
-        String correo = sc.nextLine();
-        System.out.print("Password: ");
-        String password = sc.nextLine();
+
+        System.out.println("\n=== REGISTRAR USUARIO ===");
+
         System.out.print("Nombre: ");
-        String nombre = sc.nextLine();
+        usuario.setNombre(sc.nextLine());
+
         System.out.print("Apellido: ");
-        String apellido = sc.nextLine();
-        usuario.setCorreo(correo);
-        usuario.setPassword(password);
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
+        usuario.setApellido(sc.nextLine());
+
+        System.out.print("Identificacion: ");
+        usuario.setIdentificacion(sc.nextLine());
+
+        System.out.print("Correo: ");
+        usuario.setCorreo(sc.nextLine());
+
+        System.out.print("Password: ");
+        usuario.setPassword(sc.nextLine());
+
+        System.out.print("Rol: ");
+        usuario.setRol(sc.nextLine());
+
+        System.out.print("Direccion: ");
+        usuario.setDireccion(sc.nextLine());
+
+        // 🔥 AQUÍ SE ENVÍA AL DAO
         dao.insertarUsuario(usuario);
     }
 
@@ -144,7 +175,10 @@ public class sistema {
             System.out.println("ID: " + usuario.getIdUsuario());
             System.out.println("Correo: " + usuario.getCorreo());
             System.out.println("Nombre: " + usuario.getNombre());
+            System.out.println("Identificacion: " + usuario.getIdentificacion());
             System.out.println("Apellido: " + usuario.getApellido());
+            System.out.println("Rol: " + usuario.getRol());
+            System.out.println("Direccion: " + usuario.getDireccion());
         } else {
             System.out.println("No encontrado");
         }
@@ -152,19 +186,36 @@ public class sistema {
 
     void actualizarUsuario() {
         UsuarioDAO dao = new UsuarioDAO();
+
+        System.out.print("\n=== ACTUALIZAR USUARIO ===");
+
         System.out.print("ID Usuario: ");
         int id = Integer.parseInt(sc.nextLine());
-        System.out.print("Nuevo correo: ");
-        String correo = sc.nextLine();
-        System.out.print("Nuevo nombre: ");
-        String nombre = sc.nextLine();
-        System.out.print("Nuevo apellido: ");
-        String apellido = sc.nextLine();
+
         Usuario usuario = new Usuario();
         usuario.setIdUsuario(id);
-        usuario.setCorreo(correo);
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
+
+        System.out.print("Nuevo nombre: ");
+        usuario.setNombre(sc.nextLine());
+
+        System.out.print("Nuevo apellido: ");
+        usuario.setApellido(sc.nextLine());
+
+        System.out.print("Nuevo identificacion: ");
+        usuario.setIdentificacion(sc.nextLine());
+
+        System.out.print("Nuevo correo: ");
+        usuario.setCorreo(sc.nextLine());
+
+        System.out.print("Nuevo password: ");
+        usuario.setPassword(sc.nextLine());
+
+        System.out.print("Nuevo rol: ");
+        usuario.setRol(sc.nextLine());
+
+        System.out.print("Nueva direccion: ");
+        usuario.setDireccion(sc.nextLine());
+
         dao.actualizarUsuario(usuario);
     }
 

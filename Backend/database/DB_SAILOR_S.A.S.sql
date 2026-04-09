@@ -4,7 +4,7 @@ CREATE TABLE Usuarios(
 	apellido VARCHAR(50) NOT NULL,
 	correo VARCHAR(50) NOT NULL,
     identificacion INT NOT NULL,
-	password VARCHAR(50) NOT NULL,
+	password VARCHAR(100) NOT NULL,
     rol VARCHAR(50) NOT NULL,
     direccion VARCHAR(50) NOT NULL,
 	PRIMARY KEY(idUsuario)
@@ -66,5 +66,8 @@ CREATE TABLE Inventario(
     FOREIGN KEY(idProducto) REFERENCES Productos(idProducto),
     FOREIGN KEY(idUsuario) REFERENCES Usuarios(idUsuario)
 );
+
+AFTER TABLE usuarios
+MODIFY password VARCHAR(100) NOT NULL;
 
 
