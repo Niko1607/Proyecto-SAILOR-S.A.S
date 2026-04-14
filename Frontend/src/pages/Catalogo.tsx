@@ -1,22 +1,8 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
-
-const categories = ["Todos", "Hasta la Cadera", "Pantimedias", "Compresión", "Con Diseño"];
-
-const products = [
-  { id: 1, name: "Media Cadera Clásica Negra", category: "Hasta la Cadera", price: 45000, color: "🖤" },
-  { id: 2, name: "Media Cadera Roja Pasión", category: "Hasta la Cadera", price: 48000, color: "❤️" },
-  { id: 3, name: "Media Cadera Nude Natural", category: "Hasta la Cadera", price: 42000, color: "🤎" },
-  { id: 4, name: "Pantimedia Transparente Negra", category: "Pantimedias", price: 35000, color: "🖤" },
-  { id: 5, name: "Pantimedia Beige Elegante", category: "Pantimedias", price: 35000, color: "🤍" },
-  { id: 6, name: "Media Compresión Graduada", category: "Compresión", price: 65000, color: "🩶" },
-  { id: 7, name: "Media Cadera Encaje Blanco", category: "Con Diseño", price: 55000, color: "🤍" },
-  { id: 8, name: "Media Cadera Diseño Floral", category: "Con Diseño", price: 58000, color: "🩷" },
-  { id: 9, name: "Pantimedia Control Abdomen", category: "Pantimedias", price: 52000, color: "🖤" },
-  { id: 10, name: "Media Cadera Vino Tinto", category: "Hasta la Cadera", price: 48000, color: "🍷" },
-  { id: 11, name: "Media Compresión Deportiva", category: "Compresión", price: 59000, color: "💙" },
-  { id: 12, name: "Media Cadera Encaje Negro", category: "Con Diseño", price: 62000, color: "🖤" },
-];
+import { Link } from "react-router-dom";
+import { products, categories } from "@/data/products";
+import { ShoppingCart, Star } from "lucide-react";
 
 export default function Catalogo() {
   const [active, setActive] = useState("Todos");
@@ -47,24 +33,53 @@ export default function Catalogo() {
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {filtered.map((p, i) => (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="bg-card border border-border rounded-lg overflow-hidden group hover:border-primary/50 transition-all cursor-pointer"
-            >
-              <div className="h-48 bg-secondary flex items-center justify-center text-5xl group-hover:scale-105 transition-transform">
-                {p.color}
-              </div>
-              <div className="p-4">
-                <h3 className="font-medium text-sm text-foreground">{p.name}</h3>
-                <p className="text-primary font-bold mt-1">${p.price.toLocaleString("es-CO")}</p>
-                <p className="text-muted-foreground text-xs mt-1">{p.category}</p>
-              </div>
-            </motion.div>
-          ))}
+          {filtered.map((p, i) => {
+            const discount = p.originalPrice
+              ? Math.round(((p.originalPrice - p.price) / p.originalPrice) * 100)
+              : 0;
+
+            return (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+              >
+                <Link
+                  to={`/producto/${p.id}`}
+                  className="bg-card border border-border rounded-lg overflow-hidden group hover:border-primary/50 transition-all block"
+                >
+                  <div className="h-48 bg-secondary flex items-center justify-center text-5xl group-hover:scale-105 transition-transform relative">
+                    {p.emoji}
+                    {discount > 0 && (
+                      <span className="absolute top-2 left-2 bg-primary text-primary-foreground text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        -{discount}%
+                      </span>
+                    )}
+                    <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                        <ShoppingCart className="h-4 w-4" />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-medium text-sm text-foreground truncate">{p.name}</h3>
+                    <div className="flex items-center gap-1 mt-1">
+                      <Star className="h-3 w-3 text-accent fill-accent" />
+                      <span className="text-xs text-muted-foreground">{p.rating} ({p.reviews})</span>
+                    </div>
+                    <div className="flex items-baseline gap-2 mt-1">
+                      <p className="text-primary font-bold">${p.price.toLocaleString("es-CO")}</p>
+                      {p.originalPrice && (
+                        <p className="text-muted-foreground text-xs line-through">${p.originalPrice.toLocaleString("es-CO")}</p>
+                      )}
+                    </div>
+                    <p className="text-muted-foreground text-xs mt-1">{p.category}</p>
+                  </div>
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>

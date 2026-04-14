@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ShoppingCart, User, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/context/CartContext";
 import sailorLogo from "@/assets/sailor-logo.png";
 
 const navLinks = [
@@ -17,6 +18,7 @@ const navLinks = [
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { totalItems, setIsCartOpen } = useCart();
 
   return (
     <>
@@ -59,9 +61,14 @@ export default function Navbar() {
             <Link to="/cuenta">
               <Button variant="ghost" size="icon"><User className="h-5 w-5" /></Button>
             </Link>
-            <Link to="/pedidos">
-              <Button variant="ghost" size="icon"><ShoppingCart className="h-5 w-5" /></Button>
-            </Link>
+            <Button variant="ghost" size="icon" className="relative" onClick={() => setIsCartOpen(true)}>
+              <ShoppingCart className="h-5 w-5" />
+              {totalItems > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
+                  {totalItems}
+                </span>
+              )}
+            </Button>
             <Button variant="ghost" size="icon" className="lg:hidden" onClick={() => setMobileOpen(!mobileOpen)}>
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>

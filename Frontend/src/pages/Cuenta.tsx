@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Lock, Mail, LogIn, Briefcase, Shield, User } from "lucide-react";
@@ -14,6 +15,7 @@ const roles: { key: Role; label: string; desc: string; icon: React.ReactNode }[]
 ];
 
 export default function Cuenta() {
+  const navigate = useNavigate();
   const [view, setView] = useState<View>("login");
   const [selectedRole, setSelectedRole] = useState<Role>("empleado");
 
@@ -51,7 +53,12 @@ export default function Cuenta() {
                 ))}
               </div>
 
-              <form className="space-y-4">
+              <form className="space-y-4" onSubmit={(e) => {
+                e.preventDefault();
+                if (selectedRole === "administrador") navigate("/admin");
+                else if (selectedRole === "empleado") navigate("/empleado");
+                else navigate("/");
+              }}>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Correo electrónico</label>
                   <div className="relative">
@@ -66,7 +73,7 @@ export default function Cuenta() {
                     <Input placeholder="••••••••" type="password" className="bg-secondary border-border pl-10" />
                   </div>
                 </div>
-                <Button variant="heroFilled" size="lg" className="w-full gap-2">
+                <Button type="submit" variant="heroFilled" size="lg" className="w-full gap-2">
                   <LogIn className="h-4 w-4" />
                   Ingresar como {roles.find((r) => r.key === selectedRole)?.label}
                 </Button>
