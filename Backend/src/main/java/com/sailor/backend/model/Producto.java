@@ -10,17 +10,17 @@ public class Producto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String nombreProducto;
     private String descripcion;
     private double precioProducto;
-
     private int stock; 
-
     private int stockMinimo;
     private int stockMaximo;
     private LocalDate fechaRegistro;
     private boolean activo;
+    private String categoria;
+    private String imagen;
+
 
     public Producto() {
         this.fechaRegistro = LocalDate.now();
@@ -90,5 +90,21 @@ public class Producto {
 
     public void setActivo(boolean activo) {
         this.activo = activo;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 }

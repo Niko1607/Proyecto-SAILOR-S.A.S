@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { loginUsuario } from "@/services/userService";
 import { Lock, Mail, LogIn, Briefcase, Shield, User } from "lucide-react";
 
 type Role = "empleado" | "administrador" | "cliente";
@@ -18,6 +19,8 @@ export default function Cuenta() {
   const navigate = useNavigate();
   const [view, setView] = useState<View>("login");
   const [selectedRole, setSelectedRole] = useState<Role>("empleado");
+  const [correo, setCorreo] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div className="py-16 flex items-center justify-center min-h-[70vh]">
@@ -53,24 +56,39 @@ export default function Cuenta() {
                 ))}
               </div>
 
-              <form className="space-y-4" onSubmit={(e) => {
-                e.preventDefault();
-                if (selectedRole === "administrador") navigate("/admin");
-                else if (selectedRole === "empleado") navigate("/empleado");
-                else navigate("/");
-              }}>
+              <form
+                className="space-y-4"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+
+                  try {
+                    const user = await loginUsuario(correo, password);
+                    localStorage.setItem("usaurio", JSON.stringify(user));
+
+                    if (user.rol === "ADMIN") {
+                      navigate("/admin");
+                    } else if (user.rol === "EMPLEADO") {
+                      navigate("/empleado");
+                    } else {
+                      navigate("/");
+                    }
+                  } catch (error) {
+                    alert("Correo o contraseña incorrectos");
+                  }
+                }}
+              >
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Correo electrónico</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="correo@ejemplo.com" type="email" className="bg-secondary border-border pl-10" />
+                    <Input placeholder="correo@ejemplo.com" type="email" className="bg-secondary border-border pl-10" value={correo} onChange={(e) => setCorreo(e.target.value)} />
                   </div>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Contraseña</label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="••••••••" type="password" className="bg-secondary border-border pl-10" />
+                    <Input placeholder="••••••••" type="password" className="bg-secondary border-border pl-10" value={password} onChange={(e) => setPassword(e.target.value)} />
                   </div>
                 </div>
                 <Button type="submit" variant="heroFilled" size="lg" className="w-full gap-2">
