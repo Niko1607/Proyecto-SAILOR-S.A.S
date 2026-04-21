@@ -1,82 +1,304 @@
 import { motion } from "framer-motion";
-import { BarChart3, TrendingUp, Award } from "lucide-react";
+import { BarChart3, TrendingUp, Award, AlertTriangle } from "lucide-react";
+import { useEffect, useState } from "react";
 
-const topProducts = [
-  { name: "Hoodie Premium Negro", sold: 142, revenue: "$26,838,000" },
-  { name: "Camiseta Básica Blanca", sold: 98, revenue: "$6,762,000" },
-  { name: "Jean Slim Fit Azul", sold: 76, revenue: "$12,084,000" },
-];
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer
+} from "recharts";
+
+import { getVentas } from "@/services/ventaService";
+import { getProductos, ProductoFrontend } from "@/services/productService";
+import { getUsuarios } from "@/services/userService";
+
+type Venta = {
+  id: number;
+  total: number;
+  fecha: string;
+  productos: {
+    productoId: number;
+    cantidad: number;
+  }[];
+};
+
+type Usuario = {
+  id: number;
+  rol: string;
+};
+
+type GraficaVentas = {
+  mes: string;
+  ventas: number;
+};
 
 export default function AdminReportes() {
+
+  const [ventas, setVentas] = useState(0);
+  const [pedidos, setPedidos] = useState(0);
+  const [ticketPromedio, setTicketPromedio] = useState(0);
+  const [clientes, setClientes] = useState(0);
+
+  const [ventasGrafica, setVentasGrafica] = useState<GraficaVentas[]>([]);
+  const [topProductos, setTopProductos] = useState<ProductoFrontend[]>([]);
+  const [stockBajo, setStockBajo] = useState<ProductoFrontend[]>([]);
+
+  const cargarDatos = async () => {
+
+    try {
+
+      const ventasData: Venta[] = await getVentas();
+      const productosData: ProductoFrontend[] = await getProductos();
+      const usuariosData: Usuario[] = await getUsuarios();
+
+      // ---------------------
+      // RESUMEN GENERAL
+      // ---------------------
+
+      const totalVentas = ventasData.reduce(
+        (sum, v) => sum + (v.total || 0),
+        0
+      );
+
+      const totalPedidos = ventasData.length;
+
+      const promedio =
+        totalPedidos > 0 ? totalVentas / totalPedidos : 0;
+
+      const nuevosClientes = usuariosData.filter(
+        (u) => u.rol === "CLIENTE"
+      ).length;
+
+      setVentas(totalVentas);
+      setPedidos(totalPedidos);
+      setTicketPromedio(promedio);
+      setClientes(nuevosClientes);
+
+      // ---------------------
+      // VENTAS POR MES
+      // ---------------------
+
+      const ventasPorMes: Record<string, number> = {};
+
+      ventasData.forEach((v) => {
+
+        const fecha = new Date(v.fecha);
+        const mes = fecha.toLocaleString("es-CO", { month: "short" });
+
+        if (!ventasPorMes[mes]) {
+          ventasPorMes[mes] = 0;
+        }
+
+        ventasPorMes[mes] += v.total;
+
+      });
+
+      const dataGrafica = Object.keys(ventasPorMes).map((mes) => ({
+        mes,
+        ventas: ventasPorMes[mes]
+      }));
+
+      setVentasGrafica(dataGrafica);
+
+      // ---------------------
+      // TOP PRODUCTOS
+      // ---------------------
+
+      const top = [...productosData]
+        .slice(0, 5);
+
+      setTopProductos(top);
+
+      // ---------------------
+      // STOCK BAJO
+      // ---------------------
+
+      const alertas = productosData.filter(
+        (p) => p.stock < 10
+      );
+
+      setStockBajo(alertas);
+
+    } catch (error) {
+      console.error("Error cargando reportes:", error);
+    }
+  };
+
+  useEffect(() => {
+    cargarDatos();
+  }, []);
+
   return (
     <div>
-      <h1 className="font-display text-2xl font-bold text-foreground mb-6">Reportes</h1>
+
+      <h1 className="font-display text-2xl font-bold text-foreground mb-6">
+        Dashboard de Reportes
+      </h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-card border border-border rounded-lg p-6">
-          <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2 mb-4">
-            <Award className="h-5 w-5 text-primary" /> Productos Más Vendidos
+
+        {/* RESUMEN */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-card border border-border rounded-lg p-6"
+        >
+
+          <h2 className="font-bold flex items-center gap-2 mb-4">
+            <TrendingUp className="h-5 w-5 text-primary"/>
+            Resumen General
           </h2>
-          <div className="space-y-4">
-            {topProducts.map((p, i) => (
-              <div key={p.name} className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <span className="text-primary font-bold text-lg">#{i + 1}</span>
-                  <div>
-                    <p className="text-foreground font-medium text-sm">{p.name}</p>
-                    <p className="text-muted-foreground text-xs">{p.sold} unidades</p>
-                  </div>
-                </div>
-                <span className="text-foreground font-medium text-sm">{p.revenue}</span>
+
+          <div className="space-y-3">
+
+            <div className="flex justify-between">
+              <span>Ventas</span>
+              <span className="font-bold">
+                ${ventas.toLocaleString("es-CO")}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Pedidos</span>
+              <span className="font-bold">{pedidos}</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Ticket promedio</span>
+              <span className="font-bold">
+                ${ticketPromedio.toLocaleString("es-CO")}
+              </span>
+            </div>
+
+            <div className="flex justify-between">
+              <span>Clientes</span>
+              <span className="font-bold">{clientes}</span>
+            </div>
+
+          </div>
+
+        </motion.div>
+
+        {/* GRAFICA */}
+         <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="bg-card border border-border rounded-lg p-6"
+        >
+
+          <h2 className="font-bold flex items-center gap-2 mb-4">
+            <BarChart3 className="h-5 w-5 text-primary"/>
+            Ventas por Mes
+          </h2>
+
+          <ResponsiveContainer width="100%" height={260}>
+
+            <BarChart data={ventasGrafica}>
+
+              <XAxis dataKey="mes"/>
+
+              <YAxis/>
+
+              <Tooltip/>
+
+              <Bar
+                dataKey="ventas"
+                fill="#3b82f6"
+                radius={[4,4,0,0]}
+              />
+
+            </BarChart>
+
+          </ResponsiveContainer>
+
+        </motion.div>
+
+        {/* TOP PRODUCTOS */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="bg-card border border-border rounded-lg p-6"
+        >
+
+          <h2 className="font-bold flex items-center gap-2 mb-4">
+            <Award className="h-5 w-5 text-primary"/>
+            Productos Más Vendidos
+          </h2>
+
+          <div className="space-y-3">
+
+            {topProductos.map((p, i) => (
+
+              <div
+                key={p.id}
+                className="flex justify-between text-sm"
+              >
+
+                <span>
+                  #{i+1} {p.name}
+                </span>
+
+                <span className="font-bold">
+                  Stock: {p.stock}
+                </span>
+
               </div>
+
             ))}
+
           </div>
+
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-card border border-border rounded-lg p-6">
-          <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2 mb-4">
-            <TrendingUp className="h-5 w-5 text-primary" /> Resumen Mensual
+        {/* ALERTAS */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="bg-card border border-border rounded-lg p-6"
+        >
+
+          <h2 className="font-bold flex items-center gap-2 mb-4">
+            <AlertTriangle className="h-5 w-5 text-yellow-500"/>
+            Stock Bajo
           </h2>
-          <div className="space-y-4">
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground text-sm">Ventas totales</span>
-              <span className="text-foreground font-bold">$45,684,000</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground text-sm">Pedidos completados</span>
-              <span className="text-foreground font-bold">316</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground text-sm">Ticket promedio</span>
-              <span className="text-foreground font-bold">$144,570</span>
-            </div>
-            <div className="flex justify-between items-center">
-              <span className="text-muted-foreground text-sm">Nuevos clientes</span>
-              <span className="text-foreground font-bold">42</span>
-            </div>
+
+          <div className="space-y-2 text-sm">
+
+            {stockBajo.length === 0 && (
+              <p>No hay productos con stock bajo</p>
+            )}
+
+            {stockBajo.map((p) => (
+
+              <div
+                key={p.id}
+                className="flex justify-between"
+              >
+
+                <span>{p.name}</span>
+
+                <span className="text-red-500 font-bold">
+                  {p.stock}
+                </span>
+
+              </div>
+
+            ))}
+
           </div>
+
         </motion.div>
 
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="bg-card border border-border rounded-lg p-6 lg:col-span-2">
-          <h2 className="font-display text-lg font-bold text-foreground flex items-center gap-2 mb-4">
-            <BarChart3 className="h-5 w-5 text-primary" /> Auditoría de Movimientos
-          </h2>
-          <div className="space-y-3 text-sm">
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <span className="text-xs text-muted-foreground w-32">Hoy 14:30</span>
-              <span className="text-foreground">Admin</span> agregó 20 unidades de Hoodie Premium Negro
-            </div>
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <span className="text-xs text-muted-foreground w-32">Hoy 11:15</span>
-              <span className="text-foreground">Sistema</span> descontó 1 unidad de Gorra Sailor (Pedido #1042)
-            </div>
-            <div className="flex items-center gap-3 text-muted-foreground">
-              <span className="text-xs text-muted-foreground w-32">Ayer 16:00</span>
-              <span className="text-foreground">Empleado1</span> editó precio de Jean Slim Fit
-            </div>
-          </div>
-        </motion.div>
       </div>
+
     </div>
+
   );
+
 }

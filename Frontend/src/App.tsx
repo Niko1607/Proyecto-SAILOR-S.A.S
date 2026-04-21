@@ -31,6 +31,8 @@ import EmpleadoPedidos from "./pages/empleado/EmpleadoPedidos";
 import EmpleadoInventario from "./pages/empleado/EmpleadoInventario";
 import EmpleadoClientes from "./pages/empleado/EmpleadoClientes";
 
+import AdminProductos from "./pages/admin/AdminProductos";
+
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -65,6 +67,7 @@ const App = () => (
               <Route path="clientes" element={<AdminClientes />} />
               <Route path="reportes" element={<AdminReportes />} />
               <Route path="config" element={<AdminConfig />} />
+              <Route path="productos" element={<AdminProductos />} />
             </Route>
 
             {/* Employee routes */}
