@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
 import { Button } from "@/components/ui/button";
+import { getProductoById, ProductoFrontend } from "@/services/productService";
 import {
   ShoppingCart, Star, Truck, Shield, RotateCcw, ChevronRight,
   Minus, Plus, Heart, Share2, Check
@@ -11,35 +11,62 @@ import {
 
 export default function ProductoDetalle() {
   const { id } = useParams();
-  const product = products.find((p) => p.id === Number(id));
-  const { addToCart, setIsCartOpen } = useCart();
+  const [product, setProduct] = useState<ProductoFrontend | null>(null);
 
+  useEffect(() => {
+    if (id) {
+    getProductoById(Number(id)).then(setProduct);
+    }
+  }, [id]);
+
+  const { addToCart, setIsCartOpen } = useCart();
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<"desc" | "details" | "reviews">("desc");
-
+  
   if (!product) {
     return (
       <div className="py-20 text-center">
-        <p className="text-muted-foreground text-lg">Producto no encontrado</p>
-        <Link to="/catalogo" className="text-primary hover:underline mt-2 inline-block">Volver al catálogo</Link>
+        <p className="text-muted-foreground text-lg">Cargando producto... </p>
       </div>
     );
   }
 
-  const recommended = products.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const recommended : ProductoFrontend[] = [];
+  const handleAddToCart = () => {
+    if (!selectedSize || !selectedColor || !product) return;
+    addToCart(
+      {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        emoji: product.emoji,
+        originalPrice: product.originalPrice,
+        stock: product.stock,
+        category: product.category,
+        rating: product.rating,
+        reviews: product.reviews,
+        sku: product.sku,
+        tags: product.tags,
+        colors: product.colors.map((c) => ({ name: c.name, value: c.value, emoji: "" })),
+        sizes: product.sizes,
+        details: product.details,
+      },
+      selectedSize,
+      selectedColor,
+      quantity
+    );
+    setIsCartOpen(true);
+  };
+
   const discount = product.originalPrice
     ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
     : 0;
 
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) return;
-    addToCart(product, selectedSize, selectedColor, quantity);
-    setIsCartOpen(true);
-  };
-
   return (
+
     <div className="py-8">
       <div className="container">
         {/* Breadcrumb */}
@@ -83,7 +110,7 @@ export default function ProductoDetalle() {
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="space-y-5">
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
-              {product.tags.map((tag) => (
+              {product.tags?.map((tag) => (
                 <span key={tag} className="text-[10px] uppercase tracking-wider font-semibold bg-secondary text-muted-foreground px-2.5 py-1 rounded-full border border-border">
                   {tag}
                 </span>
@@ -123,7 +150,7 @@ export default function ProductoDetalle() {
                 Color: <span className="text-muted-foreground font-normal">{selectedColor || "Selecciona"}</span>
               </p>
               <div className="flex gap-3">
-                {product.colors.map((c) => (
+                {product.colors?.map((c) => (
                   <button
                     key={c.name}
                     onClick={() => setSelectedColor(c.name)}
@@ -150,7 +177,7 @@ export default function ProductoDetalle() {
                 <button className="text-xs text-primary hover:underline">Guía de tallas</button>
               </div>
               <div className="flex gap-2">
-                {product.sizes.map((s) => (
+                {product.sizes?.map((s) => (
                   <button
                     key={s}
                     onClick={() => setSelectedSize(s)}
@@ -241,7 +268,7 @@ export default function ProductoDetalle() {
           {activeTab === "details" && (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-2xl">
               <ul className="space-y-2">
-                {product.details.map((d, i) => (
+                {product.details?.map((d, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                     <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                     {d}

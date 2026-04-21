@@ -8,7 +8,7 @@ export type Venta = {
   usuario?: {
     id: number
   }
-}
+} 
 
 export const getVentas = async () => {
   const response = await fetch(API_URL);

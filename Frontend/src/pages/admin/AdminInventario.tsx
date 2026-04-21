@@ -2,25 +2,30 @@ import { motion } from "framer-motion";
 import { Plus, Search, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getProductos, eliminarProducto, actualizarProducto } from "@/services/productService";
+import {
+  getProductos,
+  eliminarProducto,
+  actualizarProducto,
+  crearProducto,
+} from "@/services/productService";
 import { useState, useEffect } from "react";
-import { crearProducto } from "@/services/productService";
 
 export default function AdminInventario() {
+
   type Producto = {
     id: number;
     name: string;
     description: string;
     price: number;
     stock: number;
-    category: string;
+    category?: string;
   };
-  
 
   const [open, setOpen] = useState(false);
   const [inventory, setInventory] = useState<Producto[]>([]);
   const [editando, setEditando] = useState<Producto | null>(null);
-  const [nuevoProducto, setNuevoProductos] = useState({
+
+  const [nuevoProducto, setNuevoProducto] = useState({
     name: "",
     description: "",
     price: 0,
@@ -52,53 +57,108 @@ export default function AdminInventario() {
   };
 
   const handleCreate = async () => {
-    try {
-      await crearProducto(nuevoProducto);
-      setOpen(false);
+  try {
 
-      setNuevoProductos({
-        name: "",
-        description: "",
-        price: 0,
-        stock: 0,
-      });
+    await crearProducto({
+      id: 0,
+      name: nuevoProducto.name,
+      description: nuevoProducto.description,
+      price: nuevoProducto.price,
+      stock: nuevoProducto.stock,
+      category: "Medias",
+      rating: 5,
+      reviews: 0,
+      emoji: "🧦",
+      tags: [],
+      colors: [],
+      sizes: [],
+      details: []
+    });
 
-      cargarProductos();
+    setOpen(false);
+
+    setNuevoProducto({
+      name: "",
+      description: "",
+      price: 0,
+      stock: 0
+    });
+
+    cargarProductos();
+
     } catch (error) {
       console.error("Error creando producto:", error);
     }
   };
 
   const handleUpdate = async () => {
-    if (!editando) return;
 
-    try {
-      await actualizarProducto(editando.id, editando);
-      setEditando(null);
-      cargarProductos();
-    } catch (error) {
-      console.error("Error actualizando producto:", error);
-    }
-  };
+  if (!editando) return;
 
-  return (
+  try {
+
+    await actualizarProducto(editando.id, {
+      id: editando.id,
+      name: editando.name,
+      description: editando.description,
+      price: editando.price,
+      stock: editando.stock,
+      category: editando.category || "Medias",
+      rating: 5,
+      reviews: 0,
+      emoji: "🧦",
+      tags: [],
+      colors: [],
+      sizes: [],
+      details: []
+    });
+
+    setEditando(null);
+    cargarProductos();
+
+  } catch (error) {
+    console.error("Error actualizando producto:", error);
+  }
+
+};
+
+return (
     <div>
+
+      {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
-        <h1 className="font-display text-2xl font-bold text-foreground">Inventario</h1>
-        <Button variant="heroFilled" onClick = {() => setOpen(true)}><Plus className="h-4 w-4 mr-2" /> Nuevo Producto</Button>
+        <h1 className="font-display text-2xl font-bold text-foreground">
+          Inventario
+        </h1>
+
+        <Button variant="heroFilled" onClick={() => setOpen(true)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Nuevo Producto
+        </Button>
       </div>
 
+      {/* BUSCADOR */}
       <div className="mb-4 relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input placeholder="Buscar producto..." className="bg-card border-border pl-10" />
+        <Input
+          placeholder="Buscar producto..."
+          className="bg-card border-border pl-10"
+        />
       </div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-card border border-border rounded-lg overflow-hidden">
+      {/* TABLA */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="bg-card border border-border rounded-lg overflow-hidden"
+      >
         <div className="overflow-x-auto">
+
           <table className="w-full text-sm">
+
             <thead>
               <tr className="border-b border-border text-muted-foreground">
-                <th className="text-left p-4 font-medium">SKU</th>
+                <th className="text-left p-4 font-medium">ID</th>
                 <th className="text-left p-4 font-medium">Producto</th>
                 <th className="text-left p-4 font-medium">Categoría</th>
                 <th className="text-left p-4 font-medium">Precio</th>
@@ -106,34 +166,78 @@ export default function AdminInventario() {
                 <th className="text-left p-4 font-medium">Acciones</th>
               </tr>
             </thead>
+
             <tbody>
               {inventory.map((item) => (
-                <tr key={item.id} className="border-b border-border last:border-0 hover:bg-secondary/50 transition-colors">
-                  <td className="p-4 text-muted-foreground font-mono text-xs">{item.id}</td>
-                  <td className="p-4 text-foreground font-medium">{item.name}</td>
-                  <td className="p-4 text-muted-foreground">{item.category}</td>
-                  <td className="p-4 text-foreground">${item.price.toLocaleString("es-CO")}</td>
+                <tr
+                  key={item.id}
+                  className="border-b border-border hover:bg-secondary/50 transition-colors"
+                >
+
+                  <td className="p-4 text-muted-foreground font-mono text-xs">
+                    {item.id}
+                  </td>
+
+                  <td className="p-4 text-foreground font-medium">
+                    {item.name}
+                  </td>
+
+                  <td className="p-4 text-muted-foreground">
+                    {item.category || "General"}
+                  </td>
+
+                  <td className="p-4 text-foreground">
+                    ${item.price.toLocaleString("es-CO")}
+                  </td>
+
                   <td className="p-4">
-                    <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                      item.stock <= 3 ? "bg-destructive/20 text-destructive" :
-                      item.stock <= 10 ? "bg-accent/20 text-accent" :
-                      "bg-green-500/20 text-green-400"
-                    }`}>
+
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full font-medium ${
+                        item.stock <= 3
+                          ? "bg-destructive/20 text-destructive"
+                          : item.stock <= 10
+                          ? "bg-accent/20 text-accent"
+                          : "bg-green-500/20 text-green-400"
+                      }`}
+                    >
                       {item.stock}
                     </span>
+
                   </td>
+
                   <td className="p-4 flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => setEditando(item)}><Edit className="h-4 w-4" /></Button>
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => setEditando(item)}
+                    >
+                      <Edit className="h-4 w-4" />
+                    </Button>
+
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => handleDelete(item.id)}
+                    >
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
+
                   </td>
+
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
       </motion.div>
+
+      {/* MODAL CREAR PRODUCTO */}
       {open && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
           <div className="bg-card p-6 rounded-lg w-[400px] border border-border">
 
             <h2 className="text-lg font-bold mb-4">Nuevo Producto</h2>
@@ -144,7 +248,7 @@ export default function AdminInventario() {
                 placeholder="Nombre"
                 value={nuevoProducto.name}
                 onChange={(e) =>
-                  setNuevoProductos({ ...nuevoProducto, name: e.target.value })
+                  setNuevoProducto({ ...nuevoProducto, name: e.target.value })
                 }
               />
 
@@ -152,7 +256,10 @@ export default function AdminInventario() {
                 placeholder="Descripción"
                 value={nuevoProducto.description}
                 onChange={(e) =>
-                  setNuevoProductos({ ...nuevoProducto, description: e.target.value })
+                  setNuevoProducto({
+                    ...nuevoProducto,
+                    description: e.target.value,
+                  })
                 }
               />
 
@@ -161,7 +268,7 @@ export default function AdminInventario() {
                 placeholder="Precio"
                 value={nuevoProducto.price}
                 onChange={(e) =>
-                  setNuevoProductos({
+                  setNuevoProducto({
                     ...nuevoProducto,
                     price: Number(e.target.value),
                   })
@@ -173,7 +280,7 @@ export default function AdminInventario() {
                 placeholder="Stock"
                 value={nuevoProducto.stock}
                 onChange={(e) =>
-                  setNuevoProductos({
+                  setNuevoProducto({
                     ...nuevoProducto,
                     stock: Number(e.target.value),
                   })
@@ -183,6 +290,7 @@ export default function AdminInventario() {
             </div>
 
             <div className="flex justify-end gap-2 mt-4">
+
               <Button variant="ghost" onClick={() => setOpen(false)}>
                 Cancelar
               </Button>
@@ -190,14 +298,18 @@ export default function AdminInventario() {
               <Button onClick={handleCreate}>
                 Guardar
               </Button>
+
             </div>
 
           </div>
+
         </div>
       )}
 
+      {/* MODAL EDITAR PRODUCTO */}
       {editando && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
           <div className="bg-card p-6 rounded-lg w-[400px] border border-border">
 
             <h2 className="text-lg font-bold mb-4">Editar Producto</h2>
@@ -214,7 +326,10 @@ export default function AdminInventario() {
               <Input
                 value={editando.description}
                 onChange={(e) =>
-                  setEditando({ ...editando, description: e.target.value })
+                  setEditando({
+                    ...editando,
+                    description: e.target.value,
+                  })
                 }
               />
 
@@ -222,7 +337,10 @@ export default function AdminInventario() {
                 type="number"
                 value={editando.price}
                 onChange={(e) =>
-                  setEditando({ ...editando, price: Number(e.target.value) })
+                  setEditando({
+                    ...editando,
+                    price: Number(e.target.value),
+                  })
                 }
               />
 
@@ -230,7 +348,10 @@ export default function AdminInventario() {
                 type="number"
                 value={editando.stock}
                 onChange={(e) =>
-                  setEditando({ ...editando, stock: Number(e.target.value) })
+                  setEditando({
+                    ...editando,
+                    stock: Number(e.target.value),
+                  })
                 }
               />
 
@@ -245,10 +366,14 @@ export default function AdminInventario() {
               <Button onClick={handleUpdate}>
                 Actualizar
               </Button>
+
             </div>
+
           </div>
+
         </div>
       )}
+
     </div>
   );
 }
