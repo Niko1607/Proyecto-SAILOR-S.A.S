@@ -2,6 +2,8 @@ package com.sailor.backend.service;
 
 import com.sailor.backend.model.Producto;
 import com.sailor.backend.repository.ProductoRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +17,14 @@ public class ProductoService {
         this.repository = repository;
     }
 
+    // Listar sin paginación (para compatibilidad)
     public List<Producto> listar() {
         return repository.findAll();
+    }
+
+    // Listar con paginación
+    public Page<Producto> listarPaginado(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     public Producto guardar(Producto producto) {

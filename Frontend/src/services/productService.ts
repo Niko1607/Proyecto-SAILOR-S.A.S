@@ -1,3 +1,5 @@
+import { getAuthHeaders } from "@/lib/utils";
+
 const API_URL = "http://localhost:8081/api/productos";
 
 // Tipo que viene del backend
@@ -28,6 +30,17 @@ export type ProductoFrontend = {
   details: string[]
 }
 
+// Tipo para respuesta paginada
+export type PaginatedProductos = {
+  content: ProductoBackend[]
+  totalPages: number
+  totalElements: number
+  number: number
+  size: number
+  first: boolean
+  last: boolean
+}
+
 // Función para mapear backend → frontend
 const mapProducto = (p: ProductoBackend): ProductoFrontend => ({
   id: p.id,
@@ -56,14 +69,36 @@ const mapProducto = (p: ProductoBackend): ProductoFrontend => ({
 });
 
 export const getProductos = async (): Promise<ProductoFrontend[]> => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    headers: getAuthHeaders(),
+  });
   if (!response.ok) throw new Error("Error al obtener productos");
   const data: ProductoBackend[] = await response.json();
   return data.map(mapProducto);
 };
 
+// Obtener productos con paginación
+export const getProductosPaginados = async (page: number = 0, size: number = 10) => {
+  const response = await fetch(`${API_URL}/paginado?page=${page}&size=${size}`, {
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) throw new Error("Error al obtener productos");
+  const data: PaginatedProductos = await response.json();
+  return {
+    content: data.content.map(mapProducto),
+    totalPages: data.totalPages,
+    totalElements: data.totalElements,
+    number: data.number,
+    size: data.size,
+    first: data.first,
+    last: data.last,
+  };
+};
+
 export const getProductoById = async (id: number): Promise<ProductoFrontend> => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    headers: getAuthHeaders(),
+  });
   if (!response.ok) throw new Error("Producto no encontrado");
   const p: ProductoBackend = await response.json();
   return mapProducto(p);
@@ -72,7 +107,7 @@ export const getProductoById = async (id: number): Promise<ProductoFrontend> => 
 export const crearProducto = async (producto: ProductoFrontend) => {
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify({
       nombreProducto: producto.name,
       descripcion: producto.description,
@@ -87,7 +122,7 @@ export const crearProducto = async (producto: ProductoFrontend) => {
 export const actualizarProducto = async (id: number, producto: ProductoFrontend) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify({
       nombreProducto: producto.name,
       descripcion: producto.description,
@@ -96,6 +131,15 @@ export const actualizarProducto = async (id: number, producto: ProductoFrontend)
     }),
   });
   if (!response.ok) throw new Error("Error al actualizar producto");
+  return response.json();
+};
+
+export const eliminarProducto = async (id: number) => {
+  const response = await fetch(`${API_URL}/${id}`, {
+    method: "DELETE",
+    headers: getAuthHeaders(),
+  });
+  if (!response.ok) throw new Error("Error al eliminar producto");
   return response.json();
 };
 
