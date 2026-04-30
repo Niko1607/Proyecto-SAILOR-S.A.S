@@ -3,6 +3,8 @@ package com.sailor.backend.service;
 import com.sailor.backend.model.Usuario;
 import com.sailor.backend.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -68,12 +70,14 @@ public class UsuarioService {
     public Usuario obtener(Long id) { 
         return usuarioRepository.findById(id).orElse(null);
     }
+    
     // =========================
     // ELIMINAR
     // =========================
     public void eliminar(Long id) {
-    usuarioRepository.deleteById(id);
-}
+        usuarioRepository.deleteById(id);
+    }
+    
     // =========================
     // BUSCAR POR CORREO
     // =========================
@@ -82,10 +86,17 @@ public class UsuarioService {
     }
 
     // =========================
-    // LISTAR
+    // LISTAR (sin paginación)
     // =========================
     public List<Usuario> listarUsuarios() {
         return usuarioRepository.findAll();
+    }
+
+    // =========================
+    // LISTAR CON PAGINACIÓN
+    // =========================
+    public Page<Usuario> listarUsuariosPaginados(Pageable pageable) {
+        return usuarioRepository.findAll(pageable);
     }
 
     // =========================
