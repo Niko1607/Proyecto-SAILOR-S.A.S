@@ -63,7 +63,7 @@ export default function Cuenta() {
 
                   try {
                     const user = await loginUsuario(correo, password);
-                    localStorage.setItem("usaurio", JSON.stringify(user));
+                    localStorage.setItem("usuario", JSON.stringify(user));
 
                     if (user.rol === "ADMIN") {
                       navigate("/admin");

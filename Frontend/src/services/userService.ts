@@ -23,7 +23,20 @@ export const loginUsuario = async (correo: string, password: string) => {
     throw new Error("Credenciales incorrectas");
   }
 
-  return res.json();
+  const data = await res.json();
+
+  localStorage.setItem("usuario", JSON.stringify(data));
+
+  return data;
+};
+
+export const getUsuarioSesion = async () => {
+  const data = localStorage.getItem("usaurio");
+  return data ? JSON.parse(data) : null;
+};
+
+export const logoutUsuario = async () => {
+  localStorage.removeItem("usuario");
 };
 
 export const registrarUsuario = async (usuario: Usuario) => {
