@@ -76,15 +76,7 @@ Cliente (React) ↔ API REST (Spring Boot) ↔ MySQL
    - Backend/src/main/resources/application.properties
    - O usar variables de entorno (recomendado):
 
-Ejemplo de propiedades (application.properties):
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/sailor_db?useSSL=false&serverTimezone=UTC
-spring.datasource.username=sailor
-spring.datasource.password=tu_password
-spring.jpa.hibernate.ddl-auto=update
-server.port=8081
-```
-
+Ejemplo de propiedades (application.properties)
 También puedes usar variables de entorno:
 - DB_URL (jdbc...)
 - DB_USER
