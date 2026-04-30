@@ -1,4 +1,4 @@
-package tu_paquete.config;
+package com.sailor.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class CorsConfig {
 
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:8080")
-                        .allowedMethods("*")
+                        .allowedMethods("GET", "POST", "PUT", "DELETE","OPTIONS")
                         .allowedHeaders("*");
             }
         };

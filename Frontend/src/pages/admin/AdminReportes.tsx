@@ -187,8 +187,7 @@ export default function AdminReportes() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-card border border-border rounded-lg p-6"
-        >
+          className="bg-card border border-border rounded-lg p-6">
 
           <h2 className="font-bold flex items-center gap-2 mb-4">
             <BarChart3 className="h-5 w-5 text-primary"/>

@@ -7,10 +7,20 @@ import { getUsuarios } from "@/services/userService";
 import { getVentas } from "@/services/ventaService";
 
 export default function AdminDashboard() {
+  type Usuario = {
+    id: number;
+    nombre: string;
+    apellido: string;
+    correo: string;
+    password: string;
+    rol: string;
+    direccion: string;
+  };
 
   const [productos, setProductos] = useState(0);
   const [usuarios, setUsuarios] = useState(0);
   const [ventas, setVentas] = useState(0);
+  const [user, setUser] = useState<Usuario | null>(null);
 
   const cargarDatos = async () => {
     try {
@@ -32,6 +42,14 @@ export default function AdminDashboard() {
     cargarDatos();
   }, []);
 
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem("usuario");
+
+    if (usuarioGuardado) {
+      setUser(JSON.parse(usuarioGuardado));
+    }
+  }, []);
+
   const stats = [
     { label: "Ventas Totales", value: ventas, icon: DollarSign },
     { label: "Usuarios", value: usuarios, icon: ShoppingBag },
@@ -39,11 +57,11 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div>
-
+    <div className="py-16">
       <h1 className="font-display text-2xl font-bold text-foreground mb-6">
-        Dashboard
+        Bienvenido {user?.nombre}
       </h1>
+      <p className="text-muted "></p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
 
