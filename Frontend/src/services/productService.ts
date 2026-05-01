@@ -142,8 +142,3 @@ export const eliminarProducto = async (id: number) => {
   if (!response.ok) throw new Error("Error al eliminar producto");
   return response.json();
 };
-
-export const eliminarProducto = async (id: number) => {
-  const response = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-  if (!response.ok) throw new Error("Error al eliminar producto");
-};
