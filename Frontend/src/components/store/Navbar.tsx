@@ -142,18 +142,19 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* Carrito */}
+            {/* Carrito - Ahora con mejor visibility */}
             <Button
-              variant="ghost"
+              variant="outline"
               size="icon"
-              className="relative"
+              className="relative border-primary/20 hover:border-primary hover:bg-primary/5 transition-all"
               onClick={() => setIsCartOpen(true)}
+              title="Abrir carrito de compras"
             >
-              <ShoppingCart className="h-5 w-5" />
+              <ShoppingCart className="h-5 w-5 text-primary" />
 
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary text-primary-foreground text-[10px] font-bold flex items-center justify-center">
-                  {totalItems}
+                <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-destructive text-white text-[11px] font-bold flex items-center justify-center animate-pulse">
+                  {totalItems > 99 ? '99+' : totalItems}
                 </span>
               )}
             </Button>

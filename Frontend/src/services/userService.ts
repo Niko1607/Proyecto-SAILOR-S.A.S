@@ -11,6 +11,7 @@ export type Usuario = {
   id?: number;
   nombre: string;
   apellido: string;
+  identificacion: string;
   correo: string;
   password: string;
   rol: string;
@@ -76,10 +77,15 @@ export const registrarUsuario = async (usuario: Usuario) => {
   return res.json();
 };
 
-export const getUsuarios = async () => {
+export const getUsuarios = async (): Promise<Usuario[]> => {
   const res = await fetch(API, {
     headers: getAuthHeaders(),
   });
+
+  if (!res.ok) {
+    throw new Error("Error al obtener usuarios");
+  }
+
   return res.json();
 };
 
@@ -99,12 +105,16 @@ export const getUsuario = async (id: number) => {
   return res.json();
 };
 
-export const actualizarUsuario = async (id: number, usuario: Usuario) => {
+export const actualizarUsuario = async (id: number, usuario: Partial<Usuario>) => {
   const res = await fetch(`${API}/${id}`, {
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify(usuario),
   });
+
+  if (!res.ok) {
+    throw new Error("Error al actualizar usuario");
+  }
 
   return res.json();
 };
