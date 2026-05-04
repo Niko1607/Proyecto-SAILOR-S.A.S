@@ -1,0 +1,10 @@
+target/
+.git
+.gitignore
+README.md
+.env
+.env.local
+node_modules
+.mvn/wrapper/maven-wrapper.jar
+.mvn/wrapper/maven-wrapper.properties
+mvnw.cmd

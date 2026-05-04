@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: sailor-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: oregon
+    plan: free
+    healthCheckPath: /api/usuarios
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        scope: run
+      - key: SPRING_DATASOURCE_USERNAME
+        scope: run
+      - key: SPRING_DATASOURCE_PASSWORD
+        scope: run
