@@ -54,8 +54,14 @@ public class UsuarioService {
     // =========================
     public Usuario guardar(Usuario usuario) {
 
-        if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
+        if (usuario.getId() != null) {
+            Usuario existente = usuarioRepository.findById(usuario.getId()).orElse(null);
+            if (existente != null && (usuario.getPassword() == null || usuario.getPassword().isEmpty())) {
+                usuario.setPassword(existente.getPassword());
+            }
+        }
 
+        if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
             if (!usuario.getPassword().startsWith("$2a$")) {
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             }

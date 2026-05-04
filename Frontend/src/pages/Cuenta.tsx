@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { loginUsuario } from "@/services/userService";
+import { loginUsuario, registrarUsuario } from "@/services/userService";
 import { Lock, Mail, LogIn, Briefcase, Shield, User } from "lucide-react";
 
 type Role = "empleado" | "administrador" | "cliente";
@@ -19,8 +19,12 @@ export default function Cuenta() {
   const navigate = useNavigate();
   const [view, setView] = useState<View>("login");
   const [selectedRole, setSelectedRole] = useState<Role>("empleado");
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [identificacion, setIdentificacion] = useState("");
   const [correo, setCorreo] = useState("");
   const [password, setPassword] = useState("");
+  const [direccion, setDireccion] = useState("");
 
   return (
     <div className="py-16 flex items-center justify-center min-h-[70vh]">
@@ -62,12 +66,12 @@ export default function Cuenta() {
                   e.preventDefault();
 
                   try {
-                    const user = await loginUsuario(correo, password);
-                    localStorage.setItem("usuario", JSON.stringify(user));
+                    const { usuario } = await loginUsuario(correo, password);
+                    localStorage.setItem("usuario", JSON.stringify(usuario));
 
-                    if (user.rol === "ADMIN") {
+                    if (usuario.rol === "ADMIN") {
                       navigate("/admin");
-                    } else if (user.rol === "EMPLEADO") {
+                    } else if (usuario.rol === "EMPLEADO") {
                       navigate("/empleado");
                     } else {
                       navigate("/");
@@ -124,33 +128,69 @@ export default function Cuenta() {
                 <p className="text-muted-foreground text-sm mt-1">Crea tu cuenta para realizar pedidos</p>
               </div>
 
-              <form className="space-y-4">
+              <form
+                className="space-y-4"
+                onSubmit={async (e) => {
+                  e.preventDefault();
+
+                  try {
+                    await registrarUsuario({
+                      nombre,
+                      apellido,
+                      identificacion,
+                      correo,
+                      password,
+                      rol: "CLIENTE",
+                      direccion,
+                    });
+
+                    alert("Registro exitoso. Ahora puedes iniciar sesión.");
+                    setView("login");
+                    setNombre("");
+                    setApellido("");
+                    setIdentificacion("");
+                    setCorreo("");
+                    setPassword("");
+                    setDireccion("");
+                  } catch (error) {
+                    alert("Error al registrar cliente. Por favor revisa los datos e inténtalo de nuevo.");
+                  }
+                }}
+              >
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">Nombre completo</label>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Nombre</label>
                   <div className="relative">
                     <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Tu nombre" className="bg-secondary border-border pl-10" />
+                    <Input placeholder="Tu nombre" value={nombre} onChange={(e) => setNombre(e.target.value)} className="bg-secondary border-border pl-10" />
                   </div>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Apellido</label>
+                  <Input placeholder="Tu apellido" value={apellido} onChange={(e) => setApellido(e.target.value)} className="bg-secondary border-border" />
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Identificación</label>
+                  <Input placeholder="Cédula o documento" value={identificacion} onChange={(e) => setIdentificacion(e.target.value)} className="bg-secondary border-border" />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Correo electrónico</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="correo@ejemplo.com" type="email" className="bg-secondary border-border pl-10" />
+                    <Input placeholder="correo@ejemplo.com" type="email" value={correo} onChange={(e) => setCorreo(e.target.value)} className="bg-secondary border-border pl-10" />
                   </div>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-foreground mb-1.5 block">Teléfono</label>
-                  <Input placeholder="+57 300 000 0000" type="tel" className="bg-secondary border-border" />
+                  <label className="text-sm font-medium text-foreground mb-1.5 block">Dirección</label>
+                  <Input placeholder="Tu dirección" value={direccion} onChange={(e) => setDireccion(e.target.value)} className="bg-secondary border-border" />
                 </div>
                 <div>
                   <label className="text-sm font-medium text-foreground mb-1.5 block">Contraseña</label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="••••••••" type="password" className="bg-secondary border-border pl-10" />
+                    <Input placeholder="••••••••" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="bg-secondary border-border pl-10" />
                   </div>
                 </div>
-                <Button variant="heroFilled" size="lg" className="w-full gap-2">
+                <Button type="submit" variant="heroFilled" size="lg" className="w-full gap-2">
                   <User className="h-4 w-4" />
                   Crear cuenta de Cliente
                 </Button>
