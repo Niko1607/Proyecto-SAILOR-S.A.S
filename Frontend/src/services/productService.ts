@@ -1,6 +1,6 @@
 import { getAuthHeaders } from "@/lib/utils";
 
-const API_URL = "http://localhost:8081/api/productos";
+const API_URL = "https://proyecto-sailor-sas-production.up.railway.app/api/productos";
 
 // Tipo que viene del backend
 type ProductoBackend = {
