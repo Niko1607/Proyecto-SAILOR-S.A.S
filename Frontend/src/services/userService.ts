@@ -1,6 +1,6 @@
 import { getAuthHeaders } from "@/lib/utils";
 
-const API = "http://localhost:8081/api/usuarios";
+const API = "https://proyecto-sailor-sas-production.up.railway.app/api/usuarios";
 
 export type LoginResponse = {
   token: string;

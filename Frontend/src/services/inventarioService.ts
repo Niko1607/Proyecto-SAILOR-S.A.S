@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8081/api/inventario";
+const API_URL = "https://proyecto-sailor-sas-production.up.railway.app/api/inventario";
 
 export type Inventario = {
   id?: number
