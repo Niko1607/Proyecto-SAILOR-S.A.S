@@ -6,6 +6,7 @@ const sidebarLinks = [
   { label: "Inventario", path: "/admin/inventario", icon: Package },
   { label: "Pedidos", path: "/admin/pedidos", icon: ShoppingBag },
   { label: "Clientes", path: "/admin/clientes", icon: Users },
+  { label: "Empleados", path: "/admin/empleados", icon: Users },
   { label: "Reportes", path: "/admin/reportes", icon: BarChart3 },
   { label: "Configuración", path: "/admin/config", icon: Settings },
 ];
