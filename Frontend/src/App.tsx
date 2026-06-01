@@ -23,6 +23,7 @@ import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminInventario from "./pages/admin/AdminInventario";
 import AdminPedidos from "./pages/admin/AdminPedidos";
 import AdminClientes from "./pages/admin/AdminClientes";
+import AdminEmpleados from "./pages/admin/AdminEmpleados";
 import AdminReportes from "./pages/admin/AdminReportes";
 import AdminConfig from "./pages/admin/AdminConfig";
 
@@ -65,6 +66,7 @@ const App = () => (
               <Route path="inventario" element={<AdminInventario />} />
               <Route path="pedidos" element={<AdminPedidos />} />
               <Route path="clientes" element={<AdminClientes />} />
+              <Route path="empleados" element={<AdminEmpleados />} />
               <Route path="reportes" element={<AdminReportes />} />
               <Route path="config" element={<AdminConfig />} />
               <Route path="productos" element={<AdminProductos />} />
