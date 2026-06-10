@@ -1,3 +1,5 @@
+import { getAuthHeaders } from "@/lib/utils";
+
 const API_URL = "https://proyecto-sailor-sas-production.up.railway.app/api/ventas";
 
 export type Venta = {
@@ -11,20 +13,24 @@ export type Venta = {
 } 
 
 export const getVentas = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
-    throw new Error("Error al obtener ventas");
+    throw new Error(`Error al obtener ventas (${response.status})`);
   }
 
   return response.json();
 };
 
 export const getVentaById = async (id: number) => {
-    const response = await fetch(`${API_URL}/${id}`);
+    const response = await fetch(`${API_URL}/${id}`, {
+      headers: getAuthHeaders(),
+    });
     
     if(!response.ok) {
-      throw new Error("Error al obtener venta");
+      throw new Error(`Error al obtener venta (${response.status})`);
     }
 
     return response.json();
@@ -33,9 +39,7 @@ export const getVentaById = async (id: number) => {
 export const crearventa = async (venta: Venta) => {
     const response = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: getAuthHeaders(),
       body: JSON.stringify(venta),
     });
 
@@ -45,15 +49,14 @@ export const crearventa = async (venta: Venta) => {
 export const eliminarVenta = async (id: number) => {
   await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
 };
 
 export const actualizarVenta = async (id: number, venta: Venta) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(venta),
   });
 
