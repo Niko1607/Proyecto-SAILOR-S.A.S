@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ShoppingCart, User, Menu, X } from "lucide-react";
+import { BriefcaseBusiness, ChevronDown, ShoppingCart, User, Menu, X, LayoutDashboard, Package, ShoppingBag, Users, BarChart3, Settings, CircleUserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useCart } from "@/context/CartContext";
 import sailorLogo from "@/assets/sailor-logo.png";
 
@@ -25,6 +33,34 @@ type Usuario = {
   direccion: string;
 };
 
+type ModuleItem = {
+  label: string;
+  path: string;
+  icon: typeof LayoutDashboard;
+};
+
+const roleModules: Record<string, ModuleItem[]> = {
+  ADMIN: [
+    { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
+    { label: "Inventario", path: "/admin/inventario", icon: Package },
+    { label: "Pedidos", path: "/admin/pedidos", icon: ShoppingBag },
+    { label: "Clientes", path: "/admin/clientes", icon: Users },
+    { label: "Empleados", path: "/admin/empleados", icon: Users },
+    { label: "Reportes", path: "/admin/reportes", icon: BarChart3 },
+    { label: "Configuración", path: "/admin/config", icon: Settings },
+  ],
+  EMPLEADO: [
+    { label: "Pedidos", path: "/empleado", icon: ShoppingBag },
+    { label: "Inventario", path: "/empleado/inventario", icon: Package },
+    { label: "Clientes", path: "/empleado/clientes", icon: Users },
+  ],
+  CLIENTE: [
+    { label: "Mi cuenta", path: "/cuenta", icon: CircleUserRound },
+    { label: "Catálogo", path: "/catalogo", icon: Package },
+    { label: "Pedidos", path: "/pedidos", icon: ShoppingBag },
+  ],
+};
+
 export default function Navbar() {
 
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,6 +69,8 @@ export default function Navbar() {
   const { totalItems, setIsCartOpen } = useCart();
 
   const [user, setUser] = useState<Usuario | null>(null);
+  const roleKey = user?.rol?.toUpperCase() ?? "";
+  const moduleLinks = roleModules[roleKey] ?? [];
 
   // Obtener usuario de sesión
   useEffect(() => {
@@ -116,6 +154,30 @@ export default function Navbar() {
           {/* Acciones */}
           <div className="flex items-center gap-2">
 
+            {user && moduleLinks.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" size="sm" className="hidden sm:inline-flex gap-2">
+                    <BriefcaseBusiness className="h-4 w-4" />
+                    Módulo
+                    <ChevronDown className="h-4 w-4 opacity-70" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Opciones de {user.rol}</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {moduleLinks.map((item) => (
+                    <DropdownMenuItem key={item.path} asChild>
+                      <Link to={item.path} className="flex w-full items-center gap-2">
+                        <item.icon className="h-4 w-4" />
+                        {item.label}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
+
             {/* Usuario */}
             {user ? (
               <div className="flex items-center gap-2">
@@ -193,6 +255,27 @@ export default function Navbar() {
                 {l.label}
               </Link>
             ))}
+
+            {user && moduleLinks.length > 0 && (
+              <div className="pt-3 border-t border-border space-y-2">
+                <p className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+                  Módulo {user.rol}
+                </p>
+                {moduleLinks.map((item) => (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    onClick={() => setMobileOpen(false)}
+                    className={`flex items-center gap-2 text-sm tracking-wider font-medium transition-colors hover:text-primary ${
+                      location.pathname === item.path ? "text-primary" : "text-muted-foreground"
+                    }`}
+                  >
+                    <item.icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </nav>
