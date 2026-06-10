@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/usuarios")
+@CrossOrigin(origins = "*") // Permite que tu Frontend se conecte sin errores de CORS
 public class UsuarioController {
 
     @Autowired
