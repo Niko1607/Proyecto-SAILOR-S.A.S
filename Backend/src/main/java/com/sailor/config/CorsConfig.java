@@ -17,10 +17,10 @@ public class CorsConfig {
                 if (registry == null) return;
                 
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:5173", "http://localhost:8080")
+                        .allowedOriginPatterns("*")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true)
+                        .allowCredentials(false)
                         .maxAge(3600);
             }
         };
