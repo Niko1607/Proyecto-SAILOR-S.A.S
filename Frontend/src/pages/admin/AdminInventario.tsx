@@ -53,6 +53,7 @@ export default function AdminInventario() {
   const [editando, setEditando] = useState<ProductoFrontend | null>(null);
   const [nuevoProducto, setNuevoProducto] = useState<ProductoForm>(buildInitialForm());
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -90,13 +91,37 @@ export default function AdminInventario() {
   };
 
   const handleCreate = async () => {
+    const nombre = nuevoProducto.name.trim();
+    const descripcion = nuevoProducto.descripcion.trim();
+
+    if (!nombre || nombre.length < 3) {
+      alert("El nombre del producto debe tener al menos 3 caracteres.");
+      return;
+    }
+
+    if (!descripcion || descripcion.length < 10) {
+      alert("La descripción debe tener al menos 10 caracteres.");
+      return;
+    }
+
+    if (nuevoProducto.price <= 0) {
+      alert("El precio debe ser mayor a 0.");
+      return;
+    }
+
+    if (nuevoProducto.stock <= 0) {
+      alert("El stock debe ser mayor a 0.");
+      return;
+    }
+
     try {
+      setSaving(true);
       await crearProducto({
         id: 0,
         activo: nuevoProducto.activo,
         categoria: nuevoProducto.categoria,
-        name: nuevoProducto.name,
-        description: nuevoProducto.descripcion,
+        name: nombre,
+        description: descripcion,
         price: nuevoProducto.price,
         stock: nuevoProducto.stock,
         stockMinimo: nuevoProducto.stockMinimo,
@@ -115,8 +140,12 @@ export default function AdminInventario() {
       setCreateOpen(false);
       resetCreateForm();
       await cargarProductos();
+      alert("Producto guardado correctamente.");
     } catch (error) {
       console.error("Error creando producto:", error);
+      alert("No se pudo guardar el producto. Revisa los datos e intenta de nuevo.");
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -388,7 +417,9 @@ export default function AdminInventario() {
               >
                 Cancelar
               </Button>
-              <Button onClick={handleCreate}>Guardar</Button>
+              <Button onClick={handleCreate} disabled={saving}>
+                {saving ? "Guardando..." : "Guardar"}
+              </Button>
             </div>
           </div>
         </div>
