@@ -15,7 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/productos")
-@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:8080"})
+@CrossOrigin(origins = {
+    "http://localhost:5173",
+    "http://localhost:8080",
+    "https://proyecto-sailor-s-a-s.vercel.app"
+})
 public class ProductoController {
 
     private final ProductoRepository repository;
