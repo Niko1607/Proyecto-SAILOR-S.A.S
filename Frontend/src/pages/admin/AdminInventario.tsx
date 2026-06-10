@@ -47,22 +47,30 @@ const buildInitialForm = (): ProductoForm => ({
 });
 
 export default function AdminInventario() {
-  const [inventory, setInventory] = useState<ProductoFrontend[]>([]);
+  const [productos, setProductos] = useState<ProductoFrontend[]>([]);
   const [search, setSearch] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [editando, setEditando] = useState<ProductoFrontend | null>(null);
   const [nuevoProducto, setNuevoProducto] = useState<ProductoForm>(buildInitialForm());
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     cargarProductos();
   }, []);
 
   const cargarProductos = async () => {
+    setLoading(true);
+    setError(null);
+
     try {
       const data = await getProductos();
-      setInventory(data);
+      setProductos(data);
     } catch (error) {
       console.error("Error cargando productos:", error);
+      setError("No fue posible cargar los productos del inventario.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -131,7 +139,7 @@ export default function AdminInventario() {
     }
   };
 
-  const productosFiltrados = inventory.filter((item) => {
+  const productosFiltrados = productos.filter((item) => {
     const texto = `${item.name} ${item.categoria} ${item.description}`.toLowerCase();
     return texto.includes(search.toLowerCase());
   });
@@ -152,6 +160,9 @@ export default function AdminInventario() {
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
               Gestiona nombre, categoría, estado, fechas, imágenes y stock.
+            </p>
+            <p className="text-xs text-muted-foreground mt-2">
+              {productos.length} producto{productos.length === 1 ? "" : "s"} cargado{productos.length === 1 ? "" : "s"}
             </p>
           </div>
 
@@ -193,73 +204,93 @@ export default function AdminInventario() {
             </thead>
 
             <tbody>
-              {productosFiltrados.map((item) => (
-                <tr key={item.id} className="border-b border-border hover:bg-secondary/50 transition-colors">
-                  <td className="p-4">
-                    <div className="font-medium text-foreground">{item.name}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{item.description}</div>
-                    <div className="text-[11px] text-muted-foreground mt-1">
-                      {item.imagen || "Sin imagen"}
-                    </div>
-                  </td>
-
-                  <td className="p-4">
-                    <span
-                      className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium ${
-                        item.activo
-                          ? "bg-green-500/20 text-green-500"
-                          : "bg-destructive/20 text-destructive"
-                      }`}
-                    >
-                      {item.activo ? (
-                        <BadgeCheck className="h-3.5 w-3.5" />
-                      ) : (
-                        <BadgeAlert className="h-3.5 w-3.5" />
-                      )}
-                      {item.activo ? "Activo" : "Inactivo"}
-                    </span>
-                  </td>
-
-                  <td className="p-4 text-muted-foreground">{item.categoria || "General"}</td>
-
-                  <td className="p-4 text-foreground">${item.price.toLocaleString("es-CO")}</td>
-
-                  <td className="p-4">
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        item.stock <= 3
-                          ? "bg-destructive/20 text-destructive"
-                          : item.stock <= 10
-                          ? "bg-accent/20 text-accent"
-                          : "bg-green-500/20 text-green-400"
-                      }`}
-                    >
-                      {item.stock}
-                    </span>
-                  </td>
-
-                  <td className="p-4 text-muted-foreground text-sm">
-                    {item.stockMinimo} / {item.stockMaximo}
-                  </td>
-
-                  <td className="p-4 text-muted-foreground text-xs">
-                    <div className="flex items-center gap-1.5">
-                      <CalendarDays className="h-3.5 w-3.5" />
-                      {item.fechaRegistro}
-                    </div>
-                  </td>
-
-                  <td className="p-4 flex gap-1">
-                    <Button variant="ghost" size="icon" onClick={() => setEditando(item)}>
-                      <Edit className="h-4 w-4" />
-                    </Button>
-
-                    <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)}>
-                      <Trash2 className="h-4 w-4 text-destructive" />
-                    </Button>
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="p-8 text-center text-muted-foreground">
+                    Cargando productos...
                   </td>
                 </tr>
-              ))}
+              ) : error ? (
+                <tr>
+                  <td colSpan={8} className="p-8 text-center text-destructive">
+                    {error}
+                  </td>
+                </tr>
+              ) : productosFiltrados.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="p-8 text-center text-muted-foreground">
+                    No hay productos para mostrar.
+                  </td>
+                </tr>
+              ) : (
+                productosFiltrados.map((item) => (
+                  <tr key={item.id} className="border-b border-border hover:bg-secondary/50 transition-colors">
+                    <td className="p-4">
+                      <div className="font-medium text-foreground">{item.name}</div>
+                      <div className="text-xs text-muted-foreground mt-1">{item.description}</div>
+                      <div className="text-[11px] text-muted-foreground mt-1">
+                        {item.imagen || "Sin imagen"}
+                      </div>
+                    </td>
+
+                    <td className="p-4">
+                      <span
+                        className={`inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium ${
+                          item.activo
+                            ? "bg-green-500/20 text-green-500"
+                            : "bg-destructive/20 text-destructive"
+                        }`}
+                      >
+                        {item.activo ? (
+                          <BadgeCheck className="h-3.5 w-3.5" />
+                        ) : (
+                          <BadgeAlert className="h-3.5 w-3.5" />
+                        )}
+                        {item.activo ? "Activo" : "Inactivo"}
+                      </span>
+                    </td>
+
+                    <td className="p-4 text-muted-foreground">{item.categoria || "General"}</td>
+
+                    <td className="p-4 text-foreground">${item.price.toLocaleString("es-CO")}</td>
+
+                    <td className="p-4">
+                      <span
+                        className={`text-xs px-2 py-1 rounded-full font-medium ${
+                          item.stock <= 3
+                            ? "bg-destructive/20 text-destructive"
+                            : item.stock <= 10
+                            ? "bg-accent/20 text-accent"
+                            : "bg-green-500/20 text-green-400"
+                        }`}
+                      >
+                        {item.stock}
+                      </span>
+                    </td>
+
+                    <td className="p-4 text-muted-foreground text-sm">
+                      {item.stockMinimo} / {item.stockMaximo}
+                    </td>
+
+                    <td className="p-4 text-muted-foreground text-xs">
+                      <div className="flex items-center gap-1.5">
+                        <CalendarDays className="h-3.5 w-3.5" />
+                        {item.fechaRegistro}
+                      </div>
+                    </td>
+
+                    <td className="p-4 flex gap-1">
+                      <Button variant="ghost" size="icon" onClick={() => setEditando(item)}>
+                        <Edit className="h-4 w-4" />
+                      </Button>
+
+                      <Button variant="ghost" size="icon" onClick={() => handleDelete(item.id)}>
+                        <Trash2 className="h-4 w-4 text-destructive" />
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

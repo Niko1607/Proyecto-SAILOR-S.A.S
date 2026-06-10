@@ -1,3 +1,5 @@
+import { getAuthHeaders } from "@/lib/utils";
+
 const API_URL = "https://proyecto-sailor-sas-production.up.railway.app/api/detalleventas";
 
 export type DetalleVenta = {
@@ -13,30 +15,36 @@ export type DetalleVenta = {
 };
 
 export const getDetallesPorVenta = async (ventaId: number) => {
-  const response = await fetch(`${API_URL}/venta/${ventaId}`);
+  const response = await fetch(`${API_URL}/venta/${ventaId}`, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
-    throw new Error("Error al obtener detalle de venta");
+    throw new Error(`Error al obtener detalle de venta (${response.status})`);
   }
 
   return await response.json();
 };
 
 export const getDetalleVentas = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    headers: getAuthHeaders(),
+  });
 
   if (!response.ok) {
-    throw new Error("Error al obtener detalle ventas");
+    throw new Error(`Error al obtener detalle ventas (${response.status})`);
   }
 
   return response.json();
 };
 
 export const getDetalleVentaById = async (id: number) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    headers: getAuthHeaders(),
+  });
     
   if (!response.ok) {
-    throw new Error("Error al obtener detalle venta");
+    throw new Error(`Error al obtener detalle venta (${response.status})`);
   }
 
   return response.json();
@@ -45,9 +53,7 @@ export const getDetalleVentaById = async (id: number) => {
 export const crearDetalleVenta = async (detalleVenta: DetalleVenta) => {
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(detalleVenta),
   });
 
@@ -57,15 +63,14 @@ export const crearDetalleVenta = async (detalleVenta: DetalleVenta) => {
 export const eliminarDetalleVenta = async (id: number) => {
   await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: getAuthHeaders(),
   });
 };
 
 export const actualizarDetalleVenta = async (id: number, detalleVenta: DetalleVenta) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: getAuthHeaders(),
     body: JSON.stringify(detalleVenta),
   });
 

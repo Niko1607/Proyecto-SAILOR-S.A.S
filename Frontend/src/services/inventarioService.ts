@@ -16,19 +16,6 @@ export type ProductoInventario = {
   stockMinimo: number;
 };
 
-export type Inventario = {
-  id?: number;
-  stock: number;
-  stockMinimo: number;
-  stockMaximo: number;
-  producto: ProductoInventario;
-  usuario?: {
-    id: number;
-  };
-  cantidad?: number;
-  fechaMovimiento?: string;
-};
-
 const jsonHeaders = () => getAuthHeaders();
 
 export const getInventario = async () => {
@@ -50,7 +37,7 @@ export const getInventarioById = async (id: number) => {
   return response.json();
 };
 
-export const crearInventario = async (inventario: Inventario) => {
+export const crearInventario = async (inventario: ProductoInventario) => {
   const response = await fetch(`${API_URL}/movimiento`, {
     method: "POST",
     headers: jsonHeaders(),
@@ -60,7 +47,7 @@ export const crearInventario = async (inventario: Inventario) => {
   return response.json();
 };
 
-export const actualizarInventario = async (id: number, inventario: Inventario) => {
+export const actualizarInventario = async (id: number, inventario: ProductoInventario) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: jsonHeaders(),
