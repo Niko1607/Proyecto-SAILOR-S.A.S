@@ -33,7 +33,7 @@ export default function AdminClientes() {
       setClients(clientes);
     } catch (error) {
       console.error("Error cargando clientes:", error);
-      alert("No se pudieron cargar los clientes. Revisa la conexi�n con el servidor.");
+      alert("No se pudieron cargar los clientes. Revisa la conexion con el servidor.");
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ export default function AdminClientes() {
 
   const handleDelete = async (id: number | undefined) => {
     if (!id) return;
-    if (!confirm("�Est�s seguro de eliminar este cliente?")) {
+    if (!confirm("Estas seguro de eliminar este cliente?")) {
       return;
     }
 
@@ -104,7 +104,7 @@ export default function AdminClientes() {
         alert("Cliente actualizado correctamente.");
       } else {
         if (!form.password) {
-          alert("La contrase�a es obligatoria para crear un cliente.");
+          alert("La contrasena es obligatoria para crear un cliente.");
           return;
         }
 
@@ -165,14 +165,14 @@ export default function AdminClientes() {
           />
 
           <input
-            placeholder="Identificaci�n"
+            placeholder="Identificacion"
             value={form.identificacion}
             onChange={(e) => setForm({ ...form, identificacion: e.target.value })}
             className="border border-border rounded-lg px-3 py-2 bg-secondary"
           />
 
           <input
-            placeholder="Correo electr�nico"
+            placeholder="Correo electronico"
             type="email"
             value={form.correo}
             onChange={(e) => setForm({ ...form, correo: e.target.value })}
@@ -180,14 +180,14 @@ export default function AdminClientes() {
           />
 
           <input
-            placeholder="Direcci�n"
+            placeholder="Direccion"
             value={form.direccion}
             onChange={(e) => setForm({ ...form, direccion: e.target.value })}
             className="border border-border rounded-lg px-3 py-2 bg-secondary md:col-span-2"
           />
 
           <input
-            placeholder={editingId ? "Dejar en blanco para no cambiar contrase�a" : "Contrase�a"}
+            placeholder={editingId ? "Dejar en blanco para no cambiar contrasena" : "Contrasena"}
             type="password"
             value={form.password}
             onChange={(e) => setForm({ ...form, password: e.target.value })}
@@ -216,7 +216,7 @@ export default function AdminClientes() {
               <th className="p-3">Apellido</th>
               <th className="p-3">Identificaci�n</th>
               <th className="p-3">Correo</th>
-              <th className="p-3">Direcci�n</th>
+              <th className="p-3">Direccion</th>
               <th className="p-3">Acciones</th>
             </tr>
           </thead>

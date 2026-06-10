@@ -1,17 +1,40 @@
+import { getAuthHeaders } from "@/lib/utils";
+
 const API_URL = "https://proyecto-sailor-sas-production.up.railway.app/api/inventario";
 
-export type Inventario = {
-  id?: number
-  stock: number
-  stockMinimo: number
-  stockMaximo: number
-  producto: {
-    id: number
-  }
+export type ProductoInventario = {
+  id: number;
+  activo: boolean;
+  categoria: string;
+  descripcion: string;
+  fechaRegistro: string;
+  imagen: string;
+  nombreProducto: string;
+  precioProducto: number;
+  stock: number;
+  stockMaximo: number;
+  stockMinimo: number;
 };
 
+export type Inventario = {
+  id?: number;
+  stock: number;
+  stockMinimo: number;
+  stockMaximo: number;
+  producto: ProductoInventario;
+  usuario?: {
+    id: number;
+  };
+  cantidad?: number;
+  fechaMovimiento?: string;
+};
+
+const jsonHeaders = () => getAuthHeaders();
+
 export const getInventario = async () => {
-  const response = await fetch(API_URL);
+  const response = await fetch(API_URL, {
+    headers: jsonHeaders(),
+  });
 
   if (!response.ok) {
     throw new Error("Error al obtener inventario");
@@ -21,16 +44,16 @@ export const getInventario = async () => {
 };
 
 export const getInventarioById = async (id: number) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await fetch(`${API_URL}/${id}`, {
+    headers: jsonHeaders(),
+  });
   return response.json();
 };
 
 export const crearInventario = async (inventario: Inventario) => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/movimiento`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders(),
     body: JSON.stringify(inventario),
   });
 
@@ -40,9 +63,7 @@ export const crearInventario = async (inventario: Inventario) => {
 export const actualizarInventario = async (id: number, inventario: Inventario) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: jsonHeaders(),
     body: JSON.stringify(inventario),
   });
 
@@ -52,5 +73,6 @@ export const actualizarInventario = async (id: number, inventario: Inventario) =
 export const eliminarInventario = async (id: number) => {
   await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
+    headers: jsonHeaders(),
   });
 };

@@ -5,21 +5,32 @@ const API_URL = "https://proyecto-sailor-sas-production.up.railway.app/api/produ
 // Tipo que viene del backend
 type ProductoBackend = {
   id: number
+  activo: boolean
+  categoria: string
   nombreProducto: string
   descripcion: string
   precioProducto: number
   stock: number
+  stockMinimo: number
+  stockMaximo: number
+  fechaRegistro: string
+  imagen: string
 }
 
 // Tipo completo que usa el frontend
 export type ProductoFrontend = {
   id: number
+  activo: boolean
+  categoria: string
   name: string
   description: string
   price: number
   originalPrice?: number
   stock: number
-  category: string
+  stockMinimo: number
+  stockMaximo: number
+  fechaRegistro: string
+  imagen: string
   rating: number
   reviews: number
   emoji: string
@@ -44,11 +55,16 @@ export type PaginatedProductos = {
 // Función para mapear backend → frontend
 const mapProducto = (p: ProductoBackend): ProductoFrontend => ({
   id: p.id,
+  activo: p.activo,
+  categoria: p.categoria,
   name: p.nombreProducto,
   description: p.descripcion,
   price: p.precioProducto,
   stock: p.stock,
-  category: "Medias",
+  stockMinimo: p.stockMinimo,
+  stockMaximo: p.stockMaximo,
+  fechaRegistro: p.fechaRegistro,
+  imagen: p.imagen,
   rating: 5,
   reviews: 0,
   emoji: "🧦",
@@ -109,10 +125,16 @@ export const crearProducto = async (producto: ProductoFrontend) => {
     method: "POST",
     headers: getAuthHeaders(),
     body: JSON.stringify({
+      activo: producto.activo,
+      categoria: producto.categoria,
       nombreProducto: producto.name,
       descripcion: producto.description,
       precioProducto: producto.price,
       stock: producto.stock,
+      stockMinimo: producto.stockMinimo,
+      stockMaximo: producto.stockMaximo,
+      fechaRegistro: producto.fechaRegistro,
+      imagen: producto.imagen,
     }),
   });
   if (!response.ok) throw new Error("Error al crear producto");
@@ -124,10 +146,16 @@ export const actualizarProducto = async (id: number, producto: ProductoFrontend)
     method: "PUT",
     headers: getAuthHeaders(),
     body: JSON.stringify({
+      activo: producto.activo,
+      categoria: producto.categoria,
       nombreProducto: producto.name,
       descripcion: producto.description,
       precioProducto: producto.price,
       stock: producto.stock,
+      stockMinimo: producto.stockMinimo,
+      stockMaximo: producto.stockMaximo,
+      fechaRegistro: producto.fechaRegistro,
+      imagen: producto.imagen,
     }),
   });
   if (!response.ok) throw new Error("Error al actualizar producto");
